@@ -19,7 +19,9 @@ public class exportGUI extends JPanel {
     JLabel numberLb=new JLabel("商品型号");
     JLabel quantityLb=new JLabel("数量");
     JLabel priceLb=new JLabel("单价");
-    JLabel timeLb=new JLabel("时间");
+    JLabel yearLb=new JLabel("年");
+    JLabel monthLb=new JLabel("月");
+    JLabel dayLb=new JLabel("日");
     JLabel sheetLb=new JLabel("销售单号");
     JLabel startLb=new JLabel("起始日期");
     JLabel endLb=new JLabel("结束日期");
@@ -29,7 +31,9 @@ public class exportGUI extends JPanel {
     JTextField numTf=new JTextField(25);
     JTextField quaTf=new JTextField(25);
     JTextField priTf=new JTextField(25);
-    JTextField tmTf=new JTextField(25);
+    JTextField yearTf=new JTextField(5);
+    JTextField monthTf=new JTextField(3);
+    JTextField dayTf=new JTextField(3);
     JTextField sheTf=new JTextField(25);
     JTextField staTf=new JTextField(25);
     JTextField endTf=new JTextField(25);
@@ -61,9 +65,23 @@ public class exportGUI extends JPanel {
 		jframe.setContentPane(this);
 	}
 	public void initialopPanel(){
-		JLabel label=new JLabel("请点击左边按钮进行相关操作~");
-		label.setBounds(200, 200,300,300);
-		opPanel.add(label);
+		view.setInstruction("EXPORT_WHOLE:");
+		con.setInstruction();
+		con.go();
+		
+		String[] colomn={"时间","单据性质","客户姓名","商品名称","商品型号","数量","单价","总价","对应销售单号"};
+
+		 DefaultTableModel tablem=new DefaultTableModel(con.getMessageTable(),colomn){
+	    	 public boolean isCellEditable(int row,int colomn) {
+	    	     return false;
+	    	    }
+	     };
+	     JTable table=new JTable();
+	     table.setModel(tablem);
+	    JScrollPane scrollPane=new JScrollPane(table);
+	    scrollPane.setBounds(0, 200, 500, 300);
+		opPanel.add(scrollPane);
+		
 		
 	}
 	public void initialButton(){
@@ -90,7 +108,10 @@ public class exportGUI extends JPanel {
 		 numberLb.setBounds(20, 250, 100, 50);
 		 quantityLb.setBounds(20, 325, 100, 50);
 		 priceLb.setBounds(20, 400, 100, 50);
-		 timeLb.setBounds(20, 475, 100, 50);
+		 //timeLb.setBounds(20, 475, 100, 50);
+		 yearLb.setBounds(20, 475, 100, 50);
+		 monthLb.setBounds(180, 475, 50, 50);
+		 dayLb.setBounds(300,475,50,50);
 		 sheetLb.setBounds(20,100,100,50);
 		 startLb.setBounds(20,100,100,50);
 		 endLb.setBounds(20,175,100,50);
@@ -100,7 +121,10 @@ public class exportGUI extends JPanel {
 		 numTf.setBounds(150, 250, 300, 20);
 		 quaTf.setBounds(150, 325, 300, 20);
 		 priTf.setBounds(150,400,300,20);
-		 tmTf.setBounds(150, 475, 300, 20);
+		 //tmTf.setBounds(150, 475, 300, 20);
+		 yearTf.setBounds(120,475,50,20);
+		 monthTf.setBounds(230,475,40,20);
+		 dayTf.setBounds(330,475,40,20);
 		 sheTf.setBounds(150, 100, 300,20);
 		 staTf.setBounds(150, 100, 300,20);
 		 endTf.setBounds(150, 175, 300,20);
@@ -121,7 +145,9 @@ public class exportGUI extends JPanel {
 		numTf.setText("");
 		quaTf.setText("");
 		priTf.setText("");
-		tmTf.setText("");
+		yearTf.setText("");
+		monthTf.setText("");
+		dayTf.setText("");
 		
 	}
 	
@@ -162,14 +188,18 @@ public class exportGUI extends JPanel {
 		    opPanel.add(numberLb);
 		    opPanel.add(quantityLb);
 		    opPanel.add(priceLb);
-		    opPanel.add(timeLb);
+		    opPanel.add(yearLb);
+		    opPanel.add(monthLb);
+		    opPanel.add(dayLb);
 		    
 		    opPanel.add(cusTf);
 		    opPanel.add(numTf);
 		    opPanel.add(comTf);
 		    opPanel.add(quaTf);
 		    opPanel.add(priTf);
-		    opPanel.add(tmTf);
+		    opPanel.add(yearTf);
+		    opPanel.add(monthTf);
+		    opPanel.add(dayTf);
 		   
 		
 		    opPanel.add(yesBt);
@@ -187,10 +217,14 @@ public class exportGUI extends JPanel {
 			
 			opPanel.add(sheetLb);
 			opPanel.add(quantityLb);
-			opPanel.add(timeLb);
+			opPanel.add(yearLb);
+		    opPanel.add(monthLb);
+		    opPanel.add(dayLb);
 			opPanel.add(sheTf);
 			opPanel.add(quaTf);
-			opPanel.add(tmTf);
+			opPanel.add(yearTf);
+			opPanel.add(monthTf);
+			opPanel.add(dayTf);
 			
 			opPanel.add(yesBt);
 			opPanel.add(canBt);
@@ -252,10 +286,10 @@ public class exportGUI extends JPanel {
 				}
 				switch (currentPage){
 				
-				case 0:{instruction="EXPORT_ADD:"+cusTf.getText().trim()+"；"+comTf.getText().trim()+"；"+numTf.getText().trim()+"；"+quaTf.getText().trim()+"；"+priTf.getText().trim()+"；"+tmTf.getText().trim();
+				case 0:{instruction="EXPORT_ADD:"+cusTf.getText().trim()+"；"+comTf.getText().trim()+"；"+numTf.getText().trim()+"；"+quaTf.getText().trim()+"；"+priTf.getText().trim()+"；"+yearTf.getText().trim()+"/"+monthTf.getText().trim()+"/"+dayTf.getText().trim();
 				    opPanel.removeAll();
 				    
-				    JLabel label=new JLabel("<html>"+"                    确认如下销售？"+"<br>"+"-----------------------------------------------------------"+"<br><br>"+"客户姓名："+cusTf.getText().trim()+"<br><br>"+"商品名称："+comTf.getText().trim()+"<br><br>"+"商品型号："+numTf.getText().trim()+"<br><br>"+"数量："+quaTf.getText().trim()+"<br><br>"+"单价："+priTf.getText().trim()+"<br><br>"+"时间"+tmTf.getText().trim()+"<br><br>"+"---------------------------------------------------------"+"</html>");
+				    JLabel label=new JLabel("<html>"+"                    确认如下销售？"+"<br>"+"-----------------------------------------------------------"+"<br><br>"+"客户姓名："+cusTf.getText().trim()+"<br><br>"+"商品名称："+comTf.getText().trim()+"<br><br>"+"商品型号："+numTf.getText().trim()+"<br><br>"+"数量："+quaTf.getText().trim()+"<br><br>"+"单价："+priTf.getText().trim()+"<br><br>"+"时间"+yearTf.getText().trim()+"/"+monthTf.getText().trim()+"/"+dayTf.getText().trim()+"<br><br>"+"---------------------------------------------------------"+"</html>");
 					label.setBounds(50, 50,400,400);
 					JButton confirmBt=new JButton("确认");
 					JButton cancelBt=new JButton("取消");
@@ -270,11 +304,11 @@ public class exportGUI extends JPanel {
 					
 				    break;
 				}
-				case 1:{instruction="EXPORT_DEL:"+sheTf.getText().trim()+"；"+quaTf.getText().trim()+"；"+tmTf.getText().trim();
+				case 1:{instruction="EXPORT_DEL:"+sheTf.getText().trim()+"；"+quaTf.getText().trim()+"；"+yearTf.getText().trim()+"/"+monthTf.getText().trim()+"/"+dayTf.getText().trim();
 				    clearComponents();
 				    opPanel.removeAll();
 				    
-				    JLabel label=new JLabel("<html>"+"确认如下销售退货单？"+"<br>"+"-------------------------"+"<br>"+"进货单号："+sheTf.getText().trim()+"<br>"+"退货数量："+quaTf.getText().trim()+"<br>"+"日期："+tmTf.getText().trim()+"<br>"+"---------------------------"+"</html>");
+				    JLabel label=new JLabel("<html>"+"确认如下销售退货单？"+"<br>"+"-------------------------"+"<br>"+"进货单号："+sheTf.getText().trim()+"<br>"+"退货数量："+quaTf.getText().trim()+"<br>"+"日期："+yearTf.getText().trim()+"/"+monthTf.getText().trim()+"/"+dayTf.getText().trim()+"<br>"+"---------------------------"+"</html>");
 					label.setBounds(50, 50,400,400);
 					JButton confirmBt=new JButton("确认");
 					JButton cancelBt=new JButton("取消");

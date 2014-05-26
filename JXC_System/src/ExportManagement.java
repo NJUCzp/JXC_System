@@ -124,6 +124,23 @@ public class ExportManagement {
 			}while(date1.equals(date2));
 			break;
 		}
+		case 'W':{
+			for(int i=0;i<exinfo.size();i++){
+				System.out.println(exinfo.get(i));
+				helper.split(exinfo.get(i));
+				messageTable[i][0]=helper.sArray[5];
+			    messageTable[i][1]=helper.sArray[0].substring(0,3);
+			    messageTable[i][2]=helper.sArray[0].substring(4);
+			    messageTable[i][3]=helper.sArray[1];
+			    messageTable[i][4]=helper.sArray[2];
+			    messageTable[i][5]=helper.sArray[3];
+			    messageTable[i][6]=helper.sArray[4];
+			    messageTable[i][7]=helper.sArray[6];
+			    messageTable[i][8]=helper.sArray[7];
+			}
+			
+			break;
+		}
 		default:System.out.println("¸ñÊ½´íÎó£¡");
 		}
 	}

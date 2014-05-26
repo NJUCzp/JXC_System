@@ -4,7 +4,7 @@ import java.util.ArrayList;
 public class CommodityManagement {
 	String instruction;
 	String messageText=null;
-	String[][] messageTable=new String[100][7];
+	Object[][] messageTable;
 	ArrayList<String>info=new ArrayList<String>();
 	ArrayList<commodity>com=new  ArrayList<commodity>();
 	ArrayList<String>history=new ArrayList<String>();
@@ -17,14 +17,16 @@ public class CommodityManagement {
 		
 		helper.setFilename("data/commodity.txt");
 		info=helper.readfile();
+		helper.output(info);
 		
 		int n=info.size();
+		
+		com.clear();
 		
 		if(!info.get(0).equals("")){
 		    for(int i=0;i<n;i++){
 		    	if(!info.get(i).equals("")){
 		    		commodity tempcom=new commodity();
-		    		System.out.println(info.get(i));
 			        helper.split(info.get(i));
 			        tempcom.name=helper.sArray[0];
 			        tempcom.number=helper.sArray[1];
@@ -50,10 +52,20 @@ public class CommodityManagement {
 		case 'A':{
 			String s=instruction.substring(4);
 			String newinfo;
+			boolean isAlreadyThere=false;
 			helper.split(s);
-			newinfo=helper.sArray[0]+"；"+helper.sArray[1]+"；"+"0"+"；"+helper.sArray[2]+"；"+helper.sArray[3]+"；0；0";
-			info.add(newinfo);
-			System.out.println("成功添加！");
+			for(int i=0;i<com.size();i++){
+				if(com.get(i).name.equals(helper.sArray[0]))
+					isAlreadyThere=true;
+			}
+			if(!isAlreadyThere){
+				newinfo=helper.sArray[0]+"；"+helper.sArray[1]+"；"+"0"+"；"+helper.sArray[2]+"；"+helper.sArray[3]+"；0；0";
+				info.add(newinfo);
+				System.out.println("成功添加！");
+			}else{
+				System.out.println("商品已存在");
+			}
+			
 			helper.output(info);
 			break;
 		}
@@ -72,6 +84,7 @@ public class CommodityManagement {
 					info.remove(i);
     				i--;
     				n--;
+    				break;
 				}
 			}
 			if(n1==n){
@@ -139,16 +152,19 @@ public class CommodityManagement {
 		}
 		case 'S':{
 			int n=info.size();
+			messageTable=new Object[n][8];
 			for(int i=0;i<n;i++){
-				messageTable[i][0]=com.get(i).name;
-				messageTable[i][1]=com.get(i).number;
-				messageTable[i][2]=com.get(i).quantity+"";
-				messageTable[i][3]=com.get(i).defaultImportPrice+"";
-				messageTable[i][4]=com.get(i).defaultExportPrice+"";
-				messageTable[i][5]=com.get(i).latestImportPrice+"";
-				messageTable[i][6]=com.get(i).latestExportPrice+"";
+				System.out.println(com.get(i).name);
+				messageTable[i][0]=new Boolean(false);
+				messageTable[i][1]=com.get(i).name;
+				messageTable[i][2]=com.get(i).number;
+				messageTable[i][3]=com.get(i).quantity+"";
+				messageTable[i][4]=com.get(i).defaultImportPrice+"";
+				messageTable[i][5]=com.get(i).defaultExportPrice+"";
+				messageTable[i][6]=com.get(i).latestImportPrice+"";
+				messageTable[i][7]=com.get(i).latestExportPrice+"";
 			}
-			
+
 
 			break;
 
@@ -157,13 +173,11 @@ public class CommodityManagement {
 		
 	}
 	
-    
-	
 	public String getMessageText(){
 		return messageText;
 	}
 	
-	public String[][] getMessageTable(){
+	public Object[][] getMessageTable(){
 		return messageTable;
 	}
 		

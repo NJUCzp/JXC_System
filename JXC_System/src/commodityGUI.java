@@ -6,12 +6,13 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.util.ArrayList;
 public class commodityGUI extends JPanel {
 	mainFrame jframe;
 	JXC_View view=new JXC_View();
 	JXC_Controller con=new JXC_Controller(view);
-	JButton[] buttons=new JButton[]{new JButton("添加商品"),new JButton("删除商品"),new JButton("更新商品"),new JButton("查找商品"),new JButton("显示全部"),new JButton("后退")};
-	Point[] points=new Point[]{new Point(20,100),new Point(20,175),new Point(20,250),new Point(20,325),new Point(20,400),new Point(20,475)};
+	JButton[] buttons=new JButton[]{new JButton("添加商品"),new JButton("删除商品"),new JButton("更新商品"),new JButton("查找商品"),new JButton("后退")};
+	Point[] points=new Point[]{new Point(20,100),new Point(20,175),new Point(20,250),new Point(20,325),new Point(20,475)};
 	JPanel opPanel=new JPanel();
 	JLabel commodityLb=new JLabel("商品名称");
     JLabel numberLb=new JLabel("商品序号");
@@ -22,10 +23,10 @@ public class commodityGUI extends JPanel {
     JTextField imTf=new JTextField(25);
     JTextField exTf=new JTextField(25);
     
-    
     JButton yesBt=new JButton("确认");
     JButton canBt=new JButton("取消");
     
+    JTable table;    
     int currentPage;
    
    
@@ -48,13 +49,40 @@ public class commodityGUI extends JPanel {
 		jframe.setContentPane(this);
 	}
 	public void initialopPanel(){
-		JLabel label=new JLabel("请点击左边按钮进行相关操作~");
-		label.setBounds(200, 200,300,300);
-		opPanel.add(label);
+		view.setInstruction("COMMODITY_SHO:");
+		con.setInstruction();
+		con.go();
+		
+		String[] colomn={"选择","商品名称","商品型号","数量","默认进价","默认售价","上一次进价","上一次售价"};
+		DefaultTableModel tablem=new DefaultTableModel(con.getMessageTable(),colomn){
+			public boolean isCellEditable(int row,int colomn) {
+	    		 if(colomn==0)
+	    			 return true;
+	    		 else
+	    			 return false;
+	    	}
+	    	 
+	    	public Class<?> getColumnClass(int columnIndex) 
+	        { 
+	            if(columnIndex==0)
+	            { return Boolean.class; 
+	            } 
+	            return Object.class; 
+	        } 
+	    	   
+	    };
+	    JTable table=new JTable();
+	    table.setModel(tablem);
+	    this.table=table;
+	
+        JScrollPane scrollPane=new JScrollPane(table);
+	    scrollPane.setBounds(0, 200, 500, 300);
+	     
+	    opPanel.add(scrollPane);
 		
 	}
 	public void initialButton(){
-		for(int i=0;i<6;i++){
+		for(int i=0;i<buttons.length;i++){
 			buttons[i].setBorderPainted(false);
 			buttons[i].setBounds(points[i].x, points[i].y, 100, 50);
 			buttonMouseAdapterAndActionListener buttonMouseAdapterAndActionListener=new buttonMouseAdapterAndActionListener(i,this);
@@ -64,6 +92,7 @@ public class commodityGUI extends JPanel {
 			if(buttons[i].getActionListeners().length<1){
 			buttons[i].addActionListener(buttonMouseAdapterAndActionListener);
 			}
+			buttons[i].setEnabled(true);
 			this.add(buttons[i]);
 		}
 		
@@ -124,6 +153,8 @@ public class commodityGUI extends JPanel {
 		    
 		if(i==0){
 			//添加商品
+			commodity.buttons[1].setEnabled(false);
+			jframe.setContentPane(commodity);
 			opPanel.removeAll();
 			clearComponents();
 			
@@ -147,23 +178,28 @@ public class commodityGUI extends JPanel {
 		}
 		if(i==1){
 			//删除商品
-			opPanel.removeAll();
-			clearComponents();
+			ArrayList<String> instructions=new ArrayList<String>();
+			instructions.clear();
 			
+			for(int j=0;j<table.getRowCount();j++){
+				if(Boolean.parseBoolean(table.getValueAt(j, 0).toString())){
+					instructions.add("COMMODITY_DEL:"+table.getValueAt(j, 1).toString()+"；"+table.getValueAt(j, 2).toString());
+				}
+			}
 			
-			opPanel.add(commodityLb);
-			opPanel.add(numberLb);
-			opPanel.add(comTf);
-			opPanel.add(numTf);
-			
-			
-			opPanel.add(yesBt);
-			opPanel.add(canBt);
-		    addOpPanel();
-		
+			for(int j=0;j<instructions.size();j++){
+				view.setInstruction(instructions.get(j));
+				con.setInstruction();
+				con.go();
+			}
+			instructions.clear();
+			initialopPanel();
 			return;
 		}
 		if(i==2){
+			//修改商品信息
+			commodity.buttons[1].setEnabled(false);
+			jframe.setContentPane(commodity);
 			opPanel.removeAll();
 			clearComponents();
 		
@@ -176,7 +212,16 @@ public class commodityGUI extends JPanel {
 		    opPanel.add(numTf);
 		    opPanel.add(imTf);
 		    opPanel.add(exTf);
-		    		    
+		    
+		    for(int j=0;j<table.getRowCount();j++){
+				if(Boolean.parseBoolean(table.getValueAt(j, 0).toString())){
+					comTf.setText(table.getValueAt(j, 1).toString());
+					numTf.setText(table.getValueAt(j, 2).toString());
+					imTf.setText(table.getValueAt(j, 4).toString());
+					exTf.setText(table.getValueAt(j, 5).toString());
+				}
+			}
+			
 		    opPanel.add(yesBt);
 		    opPanel.add(canBt);
 
@@ -185,6 +230,8 @@ public class commodityGUI extends JPanel {
 		    return;
 		}
 		if(i==3){
+			commodity.buttons[1].setEnabled(false);
+			jframe.setContentPane(commodity);
 			opPanel.removeAll();
 			clearComponents();
 			
@@ -201,15 +248,8 @@ public class commodityGUI extends JPanel {
 		
 			return;
 		}
+		
 		if(i==4){
-			opPanel.removeAll();
-			clearComponents();
-			opPanel.add(yesBt);
-
-			addOpPanel();
-			return;
-		}
-		if(i==5){
 			setVisible(false);
 			jframe.setContentPane(new mainGUI(jframe));
 		}
@@ -227,16 +267,10 @@ public class commodityGUI extends JPanel {
 				case 0:{instruction="COMMODITY_ADD:"+comTf.getText().trim()+"；"+numTf.getText().trim()+"；"+imTf.getText().trim()+"；"+exTf.getText().trim();
 				    break;
 				}
-				case 1:{instruction="COMMODITY_DEL:"+comTf.getText().trim()+"；"+numTf.getText().trim();
-				    break;
-				}
 				case 2:{instruction="COMMODITY_UPD:"+comTf.getText().trim()+"；"+numTf.getText().trim()+"；"+imTf.getText().trim()+"；"+exTf.getText().trim();
 				    break;
 				}
 				case 3:{instruction="COMMODITY_FIN:"+comTf.getText().trim()+"；"+numTf.getText().trim();
-			        break;
-			    }
-				case 4:{instruction="COMMODITY_SHO:";
 			        break;
 			    }
 				}
@@ -248,6 +282,7 @@ public class commodityGUI extends JPanel {
 				clearComponents();
 				opPanel.removeAll();
 				
+				
 				switch (currentPage){
 				case 3:{
 					JLabel label=new JLabel(con.getMessageText());
@@ -256,24 +291,11 @@ public class commodityGUI extends JPanel {
 					opPanel.add(label);
 					break;
 				}
-				case 4:{
-					String[] colomn={"商品名称","商品型号","数量","默认进价","默认售价","上一次进价","上一次售价"};
-
-					 DefaultTableModel tablem=new DefaultTableModel(con.getMessageTable(),colomn){
-				    	 public boolean isCellEditable(int row,int colomn) {
-				    	     return false;
-				    	    }
-				     };
-				     JTable table=new JTable();
-				     table.setModel(tablem);
-				    JScrollPane scrollPane=new JScrollPane(table);
-				    scrollPane.setBounds(0, 200, 500, 300);
-					opPanel.add(scrollPane);
-					break;
-				}
+				
 				default:initialopPanel();
 				}
 				
+				opPanel.repaint();
 				addOpPanel();
 				
 	           
@@ -285,6 +307,7 @@ public class commodityGUI extends JPanel {
 			public void actionPerformed(ActionEvent e){
 				opPanel.removeAll();
 				initialopPanel();
+				initialButton();
 				addOpPanel();
 			}
 			

@@ -8,7 +8,7 @@ public class JXC_Controller {
 	
 	String instruction;
 	String messageText;
-	String messageTable[][];
+	Object messageTable[][];
 	public void setInstruction(){
 		instruction=jxcview.getInstruction();
 	}
@@ -16,7 +16,7 @@ public class JXC_Controller {
 	public String getMessageText(){
 		return messageText;
 	}
-	public String[][] getMessageTable(){
+	public Object[][] getMessageTable(){
 		return messageTable;
 	}
 	CommodityManagement commodity=new CommodityManagement();
@@ -68,6 +68,9 @@ public class JXC_Controller {
 		case "EX":{
 			exporter.setInstruction(instruction.substring(7));
 			exporter.go();
+			if(instruction.substring(7).charAt(0)=='W'){
+				messageTable=exporter.getMessageTable();
+			}
 			if(instruction.substring(7).charAt(0)=='S'){
 				messageTable=exporter.getMessageTable();
 			}
@@ -76,6 +79,9 @@ public class JXC_Controller {
 		case "IM":{
 			importer.setInstruction(instruction.substring(7));
 			importer.go();
+			if(instruction.substring(7).charAt(0)=='W'){
+				messageTable=importer.getMessageTable();
+			}
 			if(instruction.substring(7).charAt(0)=='S'){
 				messageTable=importer.getMessageTable();
 			}
@@ -93,6 +99,7 @@ public class JXC_Controller {
 			break;
 		}
 		default:System.out.println("∏Ò Ω¥ÌŒÛ£°");
+		    break;
 		}
 	}
 

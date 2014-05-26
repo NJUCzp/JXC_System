@@ -1,7 +1,5 @@
 
 import javax.swing.*;
-import javax.swing.table.DefaultTableModel;
-
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -12,14 +10,12 @@ public class LoginGUI extends JPanel {
 	mainFrame jframe;
 	JXC_View view=new JXC_View();
 	JXC_Controller con=new JXC_Controller(view);
-	//JPanel opPanel=new JPanel();
-	JButton[] buttons=new JButton[]{new JButton("登陆"),new JButton("注册"),new JButton("最小化"),new JButton("关闭")};
-	Point[] points=new Point[]{new Point(300,575),new Point(500,575),new Point(700,20),new Point(801,20)};
-	JLabel idLb=new JLabel("账号");
-    JLabel passwordLb=new JLabel("密码");
-    JLabel newidLb=new JLabel("输入账号");
-    JLabel newpassLb=new JLabel("输入密码");
-    JLabel passagianLb=new JLabel("再次输入密码");
+	public ImageIcon[] LOGIN_BUTTONS=new ImageIcon[]{new ImageIcon("graphics/login/loginButton1.png"),new ImageIcon("graphics/login/registerButton1.png"),new ImageIcon("graphics/ring.png"),new ImageIcon("graphics/ring.png"),new ImageIcon("graphics/confirm1.png"),new ImageIcon("graphics/cancel1.png")};
+	public ImageIcon[] LOGIN_BUTTONS_ENTERED=new ImageIcon[]{new ImageIcon("graphics/login/loginButton2.png"),new ImageIcon("graphics/login/registerButton2.png"),new ImageIcon("graphics/minimize.png"),new ImageIcon("graphics/close.png"),new ImageIcon("graphics/confirm2.png"),new ImageIcon("graphics/cancel2.png")};
+	public Image bg=new ImageIcon("graphics/login/login_background.png").getImage();
+	public Image[] LOGIN_BUTTON=new Image[]{new ImageIcon("graphics/login/loginButton1.png").getImage(),new ImageIcon("graphics/login/registerButton1.png").getImage(),new ImageIcon("graphics/ring.png").getImage(),new ImageIcon("graphics/ring.png").getImage(),new ImageIcon("graphics/confirm1.png").getImage(),new ImageIcon("graphics/cancel1.png").getImage()};
+	JButton[] buttons;
+	Point[] points=new Point[]{new Point(150,575),new Point(350,575),new Point(810,20),new Point(910,20)};
 
     JTextField idTf=new JTextField(25);
     JPasswordField passTp=new JPasswordField(25);
@@ -27,20 +23,20 @@ public class LoginGUI extends JPanel {
     JPasswordField newpassTp=new JPasswordField(25);
     JPasswordField passagainTp=new JPasswordField(25);
     
-    JRadioButton[] rads=new JRadioButton[]{new JRadioButton("库存管理员"),new JRadioButton("销售人员"),new JRadioButton("财务人员")}; 
+    JRadioButton doRememberMe=new JRadioButton();
+    JRadioButton[] rads=new JRadioButton[]{new JRadioButton(),new JRadioButton(),new JRadioButton()}; 
     ButtonGroup group = new ButtonGroup();
 
-    
-    JButton yesBt=new JButton("确认");
-    JButton canBt=new JButton("取消");
+    JButton yesBt=new JButton();
+    JButton canBt=new JButton();
     
     int currentPage;
     String name="";
     String position="";
    
-   
 	public LoginGUI(mainFrame jframe){
 		this.jframe=jframe;
+		this.buttons=new JButton[]{new JButton(LOGIN_BUTTONS[0]),new JButton(LOGIN_BUTTONS[1]),new JButton(LOGIN_BUTTONS[2]),new JButton(LOGIN_BUTTONS[3]),new JButton(LOGIN_BUTTONS[4]),new JButton(LOGIN_BUTTONS[5])};
 		this.setLayout(null);
 		this.setVisible(true);
 		this.setBounds(0, 0, jframe.FRAME_WIDTH, jframe.FRAME_HEIGHT);
@@ -48,27 +44,20 @@ public class LoginGUI extends JPanel {
 		initialButton();
 		initialComponents();
 		initialPanel();
-		//initialopPanel();
-		//addOpPanel();
 	}
 	
-	/*(public void addOpPanel(){
-		opPanel.setBounds(512,0,512,768);
-		opPanel.setLayout(null);
-        opPanel.setVisible(true);
-		this.add(opPanel);
-		jframe.setContentPane(this);
-	}
-	public void initialopPanel(){
-		JLabel label=new JLabel("请点击左边按钮进行相关操作~");
-		label.setBounds(200, 200,300,300);
-		opPanel.add(label);
-		
-	}*/
     public void initialButton(){
 		for(int i=0;i<buttons.length;i++){
 			buttons[i].setBorderPainted(false);
-			buttons[i].setBounds(points[i].x, points[i].y, 100, 50);
+			buttons[i].setContentAreaFilled(false);
+
+			if(i<2)
+			    buttons[i].setBounds(points[i].x, points[i].y, 150, 50);
+			else{
+				if(i<4)
+				    buttons[i].setBounds(points[i].x, points[i].y, 60, 60);
+			}
+			
 			buttonMouseAdapterAndActionListener buttonMouseAdapterAndActionListener=new buttonMouseAdapterAndActionListener(i,this);
    			if(buttons[i].getMouseListeners().length<2){
 			buttons[i].addMouseListener(buttonMouseAdapterAndActionListener);
@@ -76,49 +65,80 @@ public class LoginGUI extends JPanel {
 			if(buttons[i].getActionListeners().length<1){
 			buttons[i].addActionListener(buttonMouseAdapterAndActionListener);
 			}
-			this.add(buttons[i]);
+			if(i<4)
+			    this.add(buttons[i]);
 		}
-		
 		 jframe.setContentPane(this);
 
 	}
     
     public void initialPanel(){
-    	this.add(idLb);
-    	this.add(passwordLb);
+    	doRememberMe.setSelected(false);
+    	Helper helper=new Helper();
+    	ArrayList<String> loginInfo=new ArrayList<String>();
+    	helper.setFilename("data/current.txt");
+    	loginInfo=helper.readfile();
+    	if(loginInfo.size()==1){
+    		helper.split(loginInfo.get(0));
+    		String isRemembered=helper.sArray[2];
+    		if(isRemembered.equals("true")){
+    			idTf.setText(helper.sArray[0]);
+    			passTp.setText(helper.sArray[3]);
+    			doRememberMe.setSelected(true);
+    		}
+    	}
+    	loginInfo.clear();
+    	helper.output(loginInfo);
     	this.add(idTf);
     	this.add(passTp);
+    	this.add(doRememberMe);
 		jframe.setContentPane(this);
-
     }
-
 	
 	public void initialComponents(){
-		 idLb.setBounds(300, 100, 100, 50);
-	     passwordLb.setBounds(300, 275, 100, 50);
-	     newidLb.setBounds(300,100,100,50);
-	     newpassLb.setBounds(300,200,100,50);
-	     passagianLb.setBounds(300,300,100,50);
+		 idTf.setBounds(265, 330,200,20);
+		 passTp.setBounds(265, 412, 200, 20);
+	     
+	     idTf.setBorder(BorderFactory.createEmptyBorder());
+	     passTp.setBorder(BorderFactory.createEmptyBorder());
+	     
+	     idTf.setFont(new Font(null,3,18));
+	     passTp.setFont(new Font(null,3,18));
 
-	
-		 idTf.setBounds(400, 100,300,20);
-		 passTp.setBounds(400, 275, 300, 20);
-		 newidTf.setBounds(400, 100, 300, 20);
-		 newpassTp.setBounds(400, 200, 300, 20);
-	     passagainTp.setBounds(400,300,300,20);
+	     doRememberMe.setBounds(370, 485, 20, 20);
+	     doRememberMe.setContentAreaFilled(false);
+	     doRememberMe.setBorderPainted(false);
 	     
 	     for(int i=0;i<3;i++){
 	    	 group.add(rads[i]);
-	    	 rads[i].setBounds(350+100*i, 350, 50, 25);
+	    	 rads[i].setContentAreaFilled(false);
+	    	 rads[i].setBorderPainted(false);
 	     }
-
-	
+	     
+	     rads[0].setBounds(240, 257, 15, 15);
+	     rads[1].setBounds(410, 255, 15, 15);
+	     rads[2].setBounds(535, 255, 15, 15);
+	     
+	     newidTf.setBounds(315, 54, 200, 20);
+	     newpassTp.setBounds(315, 125, 200, 20);
+		 passagainTp.setBounds(315,193,200,20);
+		    
+		 newidTf.setBorder(BorderFactory.createEmptyBorder());
+		 newpassTp.setBorder(BorderFactory.createEmptyBorder());
+		 passagainTp.setBorder(BorderFactory.createEmptyBorder());
+		     
+		 newidTf.setFont(new Font(null,3,18));
+		 newpassTp.setFont(new Font(null,3,18));
+		 passagainTp.setFont(new Font(null,3,18));
 		 
-		 yesBt.setBounds(300, 475, 100, 50);
-		 canBt.setBounds(450,475,100,50);
+		 yesBt.setIcon(LOGIN_BUTTONS[4]);
+		 canBt.setIcon(LOGIN_BUTTONS[5]);
+		 yesBt.setBounds(175, 320, 150, 50);
+		 canBt.setBounds(450, 320, 150, 50);
 		 yesBt.setBorderPainted(false);
 		 canBt.setBorderPainted(false);
-		 
+		 yesBt.setContentAreaFilled(false);
+		 canBt.setContentAreaFilled(false);
 	}
 	
 	public void clearComponents(){
@@ -126,7 +146,14 @@ public class LoginGUI extends JPanel {
 		passTp.setText("");
 		newpassTp.setText("");;
 	    passagainTp.setText("");;
-		
+	}
+  
+	public void paintComponent(Graphics g){
+		 //super.paintComponent(g);
+		 g.drawImage(bg, 0, 0, 1024, 768, null);
+		 /*for(int i=0;i<buttons.length;i++){
+			 g.drawImage(LOGIN_BUTTON[i], points[i].x, points[i].y, LOGIN_BUTTONS[i].getImage().getWidth(null), LOGIN_BUTTONS[i].getImage().getHeight(null), null);
+		 }*/
 	}
 	
 	class buttonMouseAdapterAndActionListener extends MouseAdapter implements ActionListener{
@@ -135,22 +162,26 @@ public class LoginGUI extends JPanel {
 		private buttonMouseAdapterAndActionListener(int i,LoginGUI login){
 			this.i=i;
 			this.login=login;
-			
 		}
 		
-		/*public void mouseEntered(MouseEvent e){
+		public void mouseEntered(MouseEvent e){
 			buttons[i].setIcon(LOGIN_BUTTONS_ENTERED[i]);
-			
 		}
+		
 		public void mouseExited(MouseEvent e){
 			buttons[i].setIcon(LOGIN_BUTTONS[i]);
-			
-		}*/
+		}
+		
 		public void actionPerformed(ActionEvent e) {
 			initialComponents();
 			if(yesBt.getActionListeners().length<1)
 		        yesBt.addActionListener(new yesL());
 			canBt.addActionListener(new canL());
+			
+			if(yesBt.getMouseListeners().length<2)
+				yesBt.addMouseListener(new yesL());
+			canBt.addMouseListener(new canL());
+
 			String instruction;
 			currentPage=i;
 			System.out.println(currentPage);
@@ -168,40 +199,66 @@ public class LoginGUI extends JPanel {
 		    	Helper helper=new Helper();
 		    	ArrayList<String> loginInfo=new ArrayList<String>();
 		    	helper.setFilename("data/current.txt");
-		    	loginInfo.add(name+"；"+position);
+		    	if(doRememberMe.isSelected()){
+		    		loginInfo.add(name+"；"+position+"；"+"true"+"；"+passTp.getText());
+		    	}else{
+		    		loginInfo.add(name+"；"+position+"；"+"false"+"；"+passTp.getText());
+		    	}
 		    	helper.output(loginInfo);
-		    	//mainGUI maingui=new mainGUI(jframe);
-		    	//maingui.setPosition(position);
-		    	//maingui.setName(name);
-		    	jframe.setContentPane(new mainGUI(jframe));		    	
+		     	jframe.setContentPane(new mainGUI(jframe));		    	
 				clearComponents();
 
+		    }else{
+		    	JPanel errorPanel=new JPanel();
+		    	JLabel errorLabel=new JLabel(new ImageIcon("graphics/login/error-login.png"));
+		    	errorLabel.setBounds(0, 0, 450, 300);
+		    	errorPanel.add(errorLabel);
+		    	
+		    	initialButton();
+		    	login.buttons[0].setVisible(false);
+		    	login.buttons[1].setVisible(false);
+		    	
+		    	errorPanel.add(buttons[4]);
+		    	errorPanel.setBounds(100, 300, 450, 300);
+		    	errorPanel.setOpaque(false);
+
+		    	login.removeAll();
+		    	login.add(errorPanel);
+		    	login.add(buttons[2]);
+		    	login.add(buttons[3]);
+		    	jframe.setContentPane(login);
 		    }
 		    return;
 		}
 		if(i==1){
 			//注册
-			login.removeAll();
-			clearComponents();
+			JPanel registerPanel=new JPanel(){
+				public void paintComponent(Graphics g){
+					g.drawImage(new ImageIcon("graphics/login/register.png").getImage(), 0, 0, 725, 425, null);
+				}
+			};
 			
+			registerPanel.setLayout(null);
 			
-			login.add(newidLb);
-			login.add(newpassLb);
-			login.add(passagianLb);
-			
-			login.add(newidTf);
-			login.add(newpassTp);
-			login.add(passagainTp);
+			registerPanel.add(newidTf);
+			registerPanel.add(newpassTp);
+			registerPanel.add(passagainTp);
 			
 			for(int i=0;i<3;i++){
-				login.add(rads[i]);
+				registerPanel.add(rads[i]);
 			}
 			
-			login.add(yesBt);
-			login.add(canBt);
-		    jframe.setContentPane(login);
-		    
-		  
+	    	registerPanel.add(yesBt);
+	    	registerPanel.add(canBt);
+	    	
+			registerPanel.setBounds(50, 250, 725, 425);
+			registerPanel.setOpaque(false);
+			login.removeAll();
+			
+			login.add(registerPanel);
+	    	login.add(buttons[2]);
+	    	login.add(buttons[3]);
+	    	jframe.setContentPane(login);
 			return;
 		}
 		
@@ -218,16 +275,30 @@ public class LoginGUI extends JPanel {
 			//System.out.println(0);
 			return;
 		}
+		if(i==4){
+		    jframe.setContentPane(new LoginGUI(jframe));
+		    return;
+		}
 		
 		}
 		
 		
-		class yesL implements ActionListener{
+		class yesL extends MouseAdapter implements ActionListener{
 			String keyword;
 			String instruction;
 		    //@SuppressWarnings("deprecation")
+			public void mouseEntered(MouseEvent e){
+				yesBt.setIcon(new ImageIcon("graphics/confirm2.png"));
+				
+			}
+			public void mouseExited(MouseEvent e){
+				yesBt.setIcon(new ImageIcon("graphics/confirm1.png"));
+				
+			}
+			
 			public void actionPerformed(ActionEvent e){
 				String position="";
+				boolean haveError=false;
 				if(newpassTp.getText().equals(passagainTp.getText())){
 					    if(rads[0].isSelected()){
 					    	position="stockManager";
@@ -238,17 +309,67 @@ public class LoginGUI extends JPanel {
 					    if(rads[2].isSelected()){
 					    	position="account";
 					    }
-						instruction="LOGIN_RES:"+newidTf.getText().trim()+"；"+newpassTp.getText().trim()+"；"+position;
-					    login.removeAll();
-					    //注册成功
+					    if(rads[0].isSelected()||rads[1].isSelected()||rads[2].isSelected()==false)
+					    	haveError=true;
+					    if(newidTf.getText().trim()==""&&newpassTp.getText().trim()==""||passagainTp.getText().trim()=="")
+					    	haveError=true;
+					    if(!haveError){
+						    instruction="LOGIN_RES:"+newidTf.getText().trim()+"；"+newpassTp.getText().trim()+"；"+position+"；"+"false";
+						    view.setInstruction(instruction);
+							con.setInstruction();
+							con.go();
+							
+							JPanel successPanel=new JPanel(){
+								public void paintComponent(Graphics g){
+									g.drawImage(new ImageIcon("graphics/login/success_register.png").getImage(), 0, 0, 725, 425, null);
+								}
+							};
+					    	successPanel.setLayout(null);
+					    	
+					    	initialButton();
+					    	login.buttons[0].setVisible(false);
+					    	login.buttons[1].setVisible(false);
 
+					    	login.buttons[4].setBounds(287, 320, 150, 50);
+					    	successPanel.setBounds(50, 250, 725, 425);
+					    	successPanel.setOpaque(false);
+					    	successPanel.add(login.buttons[4]);
+
+					    	login.removeAll();
+					    	login.add(successPanel);
+					    	login.add(buttons[2]);
+					    	login.add(buttons[3]);
+					    	jframe.setContentPane(login);
+					    	
+					    }
+					    else{
+					    	JPanel errorPanel=new JPanel(){
+								public void paintComponent(Graphics g){
+									g.drawImage(new ImageIcon("graphics/login/new2_error_register.png").getImage(), 0, 0, 725, 425, null);
+								}
+							};
+					    	errorPanel.setLayout(null);
+					    	
+					    	initialButton();
+					    	login.buttons[0].setVisible(false);
+					    	login.buttons[1].setVisible(false);
+
+					    	login.buttons[4].setBounds(287, 320, 150, 50);
+					    	errorPanel.setBounds(50, 250, 725, 425);
+					    	errorPanel.setOpaque(false);
+					    	errorPanel.add(login.buttons[4]);
+
+					    	login.removeAll();
+					    	login.add(errorPanel);
+					    	login.add(buttons[2]);
+					    	login.add(buttons[3]);
+					    	jframe.setContentPane(login);
+					    }
 				}
-				view.setInstruction(instruction);
-				con.setInstruction();
-				con.go();
 				
-			    setVisible(false);
-			    jframe.setContentPane(new LoginGUI(jframe));
+				
+			    //setVisible(false);
+			    //jframe.setContentPane(new LoginGUI(jframe));
 				
 	
 			}
@@ -256,11 +377,20 @@ public class LoginGUI extends JPanel {
 			
 		}
 		
-		class canL implements ActionListener{
+		class canL extends MouseAdapter implements ActionListener{
+			public void mouseEntered(MouseEvent e){
+				canBt.setIcon(new ImageIcon("graphics/cancel2.png"));
+				
+			}
+			public void mouseExited(MouseEvent e){
+				canBt.setIcon(new ImageIcon("graphics/cancel1.png"));
+				
+			}
 			public void actionPerformed(ActionEvent e){
-				login.removeAll();
-				login.initialButton();
-				login.initialPanel();
+				//login.removeAll();
+				//login.initialButton();
+				//login.initialPanel();
+				jframe.setContentPane(new LoginGUI(jframe));
 			}
 			
 		}

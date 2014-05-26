@@ -4,7 +4,7 @@ import java.util.ArrayList;
 public class CustomerManagement {
 	String instruction;
 	String messageText=null;
-	String[][] messageTable=new String[100][5];
+	Object[][] messageTable;
 	ArrayList<String>info=new ArrayList<String>();
 	ArrayList<customer>cus=new  ArrayList<customer>();
 	Helper helper=new Helper();
@@ -13,6 +13,7 @@ public class CustomerManagement {
 		helper.setFilename("data/customer.txt");
 		info=helper.readfile();
 		int n=info.size();
+		cus.clear();
 		if(!info.get(0).equals("")){
 		for(int i=0;i<n;i++){
 			customer tempcus=new customer();
@@ -54,6 +55,7 @@ public class CustomerManagement {
 					info.remove(i);
     				i--;
     				n--;
+    				break;
 				}
 			}
 			if(n1==n){
@@ -111,13 +113,14 @@ public class CustomerManagement {
 		}
 		case 'S':{
 			int n=info.size();
+			messageTable=new Object[n][6];
 			for(int i=0;i<n;i++){
-				
-				messageTable[i][0]=cus.get(i).name;
-				messageTable[i][1]=cus.get(i).phoneNumber;
-				messageTable[i][2]=cus.get(i).needToReceive+"";
-				messageTable[i][3]=cus.get(i).needToPay+"";
-				messageTable[i][4]=cus.get(i).total+"";
+				messageTable[i][0]=new Boolean(false);
+				messageTable[i][1]=cus.get(i).name;
+				messageTable[i][2]=cus.get(i).phoneNumber;
+				messageTable[i][3]=cus.get(i).needToReceive+"";
+				messageTable[i][4]=cus.get(i).needToPay+"";
+				messageTable[i][5]=cus.get(i).total+"";
 			}
 			
 
@@ -130,7 +133,7 @@ public class CustomerManagement {
 		return messageText;
 	}
 	
-	public String[][] getMessageTable(){
+	public Object[][] getMessageTable(){
 		return messageTable;
 	}
 

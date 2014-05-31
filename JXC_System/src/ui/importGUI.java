@@ -23,6 +23,7 @@ public class importGUI extends JPanel {
 	Image bg=new ImageIcon("graphics/option_background.png").getImage();
 	JButton[] buttons=new JButton[6];
 	JPanel opPanel=new JPanel();
+	JLabel messageLabel=new JLabel();
 	JLabel customerLb=new JLabel(new ImageIcon("graphics/customer/customer_name.png"));
 	JLabel commodityLb=new JLabel(new ImageIcon("graphics/commodity/commodity_name.png"));
     JLabel numberLb=new JLabel(new ImageIcon("graphics/commodity/commodity_number.png"));
@@ -32,7 +33,6 @@ public class importGUI extends JPanel {
     JLabel sheetLb=new JLabel(new ImageIcon("graphics/import/import_sheet.png"));
     JLabel startLb=new JLabel(new ImageIcon("graphics/begin_time.png"));
     JLabel endLb=new JLabel(new ImageIcon("graphics/end_time.png"));
-
     /*JTextField cusTf=new JTextField(25);
     JTextField comTf=new JTextField(25);
     JTextField numTf=new JTextField(25);
@@ -44,11 +44,8 @@ public class importGUI extends JPanel {
     JTextField sheTf=new JTextField(25);
     JTextField staTf=new JTextField(25);
     JTextField endTf=new JTextField(25);*/
-
-    
     JButton yesBt=new JButton(new ImageIcon("graphics/confirm1.png"));
     JButton canBt=new JButton(new ImageIcon("graphics/cancel1.png"));
-    
     JTable table;    
     int currentPage;
    
@@ -96,10 +93,14 @@ public class importGUI extends JPanel {
 		opPanel.setLayout(null);
         opPanel.setVisible(true);
         opPanel.setOpaque(false);
+        messageLabel.setOpaque(false);
+        messageLabel.setBounds(270, 580, 754, 188);
 		this.add(opPanel);
+        this.add(messageLabel);
 		jframe.setContentPane(this);
 	}
 	public void initialopPanel(){
+        messageLabel.setIcon(new ImageIcon("graphics/option_message_default.png"));
 		view.setInstruction("IMPORT_WHOLE:");
 		con.setInstruction();
 		con.go();
@@ -120,9 +121,7 @@ public class importGUI extends JPanel {
 			}
 			this.add(buttons[i]);
 		}
-		
 		 jframe.setContentPane(this);
-
 	}
 	
 	public void initialComponents(){
@@ -135,7 +134,6 @@ public class importGUI extends JPanel {
 		 sheetLb.setBounds(100,20,400,60);
 		 startLb.setBounds(100,20,550,60);
 		 endLb.setBounds(100,100,550,60);
-		 
 		 for(int i=0;i<textfields.length;i++){
 			 textfields[i].setBorder(BorderFactory.createEmptyBorder());
 			 textfields[i].setFont(new Font(null,3,18));
@@ -152,7 +150,6 @@ public class importGUI extends JPanel {
 				 textfields[i].setBounds(tf_points[i].x, tf_points[i].y, 40, 20);
 			 }
 		 }
-
 		 yesBt.setBounds(100, 410, 200, 60);
 		 canBt.setBounds(320,410,200,60);
 		 yesBt.setBorderPainted(false);
@@ -167,11 +164,7 @@ public class importGUI extends JPanel {
 		
 	}
 	public void paintComponent(Graphics g){
-		 //super.paintComponent(g);
 		 g.drawImage(bg, 0, 0, 1024, 768, null);
-		 /*for(int i=0;i<buttons.length;i++){
-			 g.drawImage(LOGIN_BUTTON[i], points[i].x, points[i].y, LOGIN_BUTTONS[i].getImage().getWidth(null), LOGIN_BUTTONS[i].getImage().getHeight(null), null);
-		 }*/
 	}
 	class buttonMouseAdapterAndActionListener extends MouseAdapter implements ActionListener{
 		int i;
@@ -208,7 +201,8 @@ public class importGUI extends JPanel {
 			//添加进货单
 			opPanel.removeAll();
 			clearComponents();
-			
+	        messageLabel.setIcon(new ImageIcon("graphics/option_message_default.png"));
+
 			for(int j=0;j<8;j++){
 				opPanel.add(textfields[j]);
 			}		
@@ -223,14 +217,14 @@ public class importGUI extends JPanel {
 		    opPanel.add(canBt);
 
 		    addOpPanel();
-		    
 		    return;
 		}
 		if(i==1){
 			//添加进货退货单
 			opPanel.removeAll();
 			clearComponents();
-			
+	        messageLabel.setIcon(new ImageIcon("graphics/option_message_default.png"));
+
 			timeLb.setBounds(160, 180, 550, 60);
 			opPanel.add(sheetLb);
 			opPanel.add(quaLb);
@@ -246,7 +240,6 @@ public class importGUI extends JPanel {
 			opPanel.add(textfields[6]);
 			opPanel.add(textfields[7]);
 			opPanel.add(textfields[8]);
-
 
 			/*opPanel.add(yearTf);
 		    opPanel.add(monthTf);
@@ -265,9 +258,7 @@ public class importGUI extends JPanel {
 			}
 			
 			opPanel.add(yesBt);
-			opPanel.add(canBt);
-			
-			
+			opPanel.add(canBt);			
 		    addOpPanel();
 		
 			return;
@@ -277,7 +268,8 @@ public class importGUI extends JPanel {
 			//显示单据
 			opPanel.removeAll();
 			clearComponents();
-			
+	        messageLabel.setIcon(new ImageIcon("graphics/option_message_default.png"));
+
 			opPanel.add(startLb);
 			opPanel.add(endLb);
 			textfields[5].setBounds(270, 38, 50, 20);
@@ -310,14 +302,11 @@ public class importGUI extends JPanel {
 			System.exit(0);
 			return;
 		}
-		
 		}
-		
 		
 		class yesL extends MouseAdapter implements ActionListener{
 			String keyword;
 			String instruction;
-			
 			public void mouseEntered(MouseEvent e){
 				yesBt.setIcon(new ImageIcon("graphics/confirm2.png"));
 				
@@ -345,7 +334,11 @@ public class importGUI extends JPanel {
 						con.setInstruction();
 						con.go();
 						opPanel.removeAll();
+						String errorMessage=con.getMessageText();
 						initialopPanel();
+						if(!errorMessage.equals("")){
+						    messageLabel.setIcon(new ImageIcon(errorMessage));
+					    }
 						addOpPanel();
 					}
 				});
@@ -384,7 +377,6 @@ public class importGUI extends JPanel {
 				cancelBt.addMouseListener(new MouseAdapter(){
 					public void mouseEntered(MouseEvent e){
 						cancelBt.setIcon(new ImageIcon("graphics/last_step.png"));
-						
 					}
 					public void mouseExited(MouseEvent e){
 						cancelBt.setIcon(new ImageIcon("graphics/last_step2.png"));
@@ -402,62 +394,56 @@ public class importGUI extends JPanel {
 				imports.add(confirmPanel);
 				jframe.setContentPane(imports);
 			}
-			
 			public void actionPerformed(ActionEvent e){
-				
 				switch (currentPage){
-				
-				case 0:{instruction="IMPORT_ADD:"+textfields[0].getText().trim()+"；"+textfields[1].getText().trim()+"；"+textfields[2].getText().trim()+"；"+textfields[3].getText().trim()+"；"+textfields[4].getText().trim()+"；"+textfields[5].getText().trim()+"/"+textfields[6].getText().trim()+"/"+textfields[7].getText().trim();
-				    opPanel.setVisible(false);    
-				    opPanel.removeAll();
-				    JLabel label=new JLabel("<html>"+"                    确认如下进货单？"+"<br>"+"-----------------------------------------------------------"+"<br><br>"+"客户姓名："+textfields[0].getText().trim()+"<br><br>"+"商品名称："+textfields[1].getText().trim()+"<br><br>"+"商品型号："+textfields[2].getText().trim()+"<br><br>"+"数量："+textfields[3].getText().trim()+"<br><br>"+"单价："+textfields[4].getText().trim()+"<br><br>"+"时间"+textfields[5].getText().trim()+"/"+textfields[6].getText().trim()+"/"+textfields[7].getText().trim()+"<br><br>"+"---------------------------------------------------------"+"</html>");
-					addConfirmPanel(label);
+				case 0:{
+					if(textfields[0].getText().trim().equals("")||textfields[1].getText().trim().equals("")||textfields[2].getText().trim().equals("")||textfields[3].getText().trim().equals("")||textfields[4].getText().trim().equals("")||textfields[5].getText().trim().equals("")||textfields[6].getText().trim().equals("")||textfields[7].getText().trim().equals("")){
+						con.setMessageText("graphics/option_error_empty.png");
+						System.out.println("empty error");
+					}else{
+						instruction="IMPORT_ADD:"+textfields[0].getText().trim()+"；"+textfields[1].getText().trim()+"；"+textfields[2].getText().trim()+"；"+textfields[3].getText().trim()+"；"+textfields[4].getText().trim()+"；"+textfields[5].getText().trim()+"/"+textfields[6].getText().trim()+"/"+textfields[7].getText().trim();
+					    opPanel.setVisible(false);    
+					    opPanel.removeAll();
+					    JLabel label=new JLabel("<html>"+"                    确认如下进货单？"+"<br>"+"-----------------------------------------------------------"+"<br><br>"+"客户姓名："+textfields[0].getText().trim()+"<br><br>"+"商品名称："+textfields[1].getText().trim()+"<br><br>"+"商品型号："+textfields[2].getText().trim()+"<br><br>"+"数量："+textfields[3].getText().trim()+"<br><br>"+"单价："+textfields[4].getText().trim()+"<br><br>"+"时间"+textfields[5].getText().trim()+"/"+textfields[6].getText().trim()+"/"+textfields[7].getText().trim()+"<br><br>"+"---------------------------------------------------------"+"</html>");
+						addConfirmPanel(label);
+					}
 				    break;
 				}
-				case 1:{instruction="IMPORT_DEL:"+textfields[8].getText().trim()+"；"+textfields[3].getText().trim()+"；"+textfields[5].getText().trim()+"/"+textfields[6].getText().trim()+"/"+textfields[7].getText().trim();
-			        opPanel.setVisible(false);    
-				    opPanel.removeAll();
-				    JLabel label=new JLabel("<html>"+"确认如下进货退货单？"+"<br>"+"-------------------------"+"<br>"+"进货单号："+textfields[8].getText().trim()+"<br>"+"退货数量："+textfields[3].getText().trim()+"<br>"+"日期："+textfields[5].getText().trim()+"/"+textfields[6].getText().trim()+"/"+textfields[7].getText().trim()+"<br>"+"---------------------------"+"</html>");
-				    addConfirmPanel(label);
+				case 1:{
+					if(textfields[8].getText().trim().equals("")||textfields[3].getText().trim().equals("")||textfields[5].getText().trim().equals("")||textfields[6].getText().trim().equals("")||textfields[7].getText().trim().equals("")){
+						con.setMessageText("graphics/option_error_empty.png");
+					}else{
+						instruction="IMPORT_DEL:"+textfields[8].getText().trim()+"；"+textfields[3].getText().trim()+"；"+textfields[5].getText().trim()+"/"+textfields[6].getText().trim()+"/"+textfields[7].getText().trim();
+				        opPanel.setVisible(false);    
+					    opPanel.removeAll();
+					    JLabel label=new JLabel("<html>"+"确认如下进货退货单？"+"<br>"+"-------------------------"+"<br>"+"进货单号："+textfields[8].getText().trim()+"<br>"+"退货数量："+textfields[3].getText().trim()+"<br>"+"日期："+textfields[5].getText().trim()+"/"+textfields[6].getText().trim()+"/"+textfields[7].getText().trim()+"<br>"+"---------------------------"+"</html>");
+					    addConfirmPanel(label);
+					}
 				    break;
 				}
-				case 2:{instruction="IMPORT_SHO:"+textfields[5].getText().trim()+"/"+textfields[6].getText().trim()+"/"+textfields[7].getText().trim()+"；"+textfields[11].getText().trim()+"/"+textfields[12].getText().trim()+"/"+textfields[13].getText().trim();
-				    view.setInstruction(instruction);
-				    con.setInstruction();
-				    con.go();
-				    
-				    clearComponents();
-					opPanel.removeAll();
-					
-				    break;
-				}
-				}
-				
-				switch (currentPage){
 				case 2:{
-					/*String[] colomn={"时间","单据性质","客户姓名","商品名称","商品型号","数量","单价","总价","对应进货单号"};
-
-					 DefaultTableModel tablem=new DefaultTableModel(con.getMessageTable(),colomn){
-				    	 public boolean isCellEditable(int row,int colomn) {
-				    	     return false;
-				    	    }
-				     };
-				     JTable table=new JTable();
-				     table.setModel(tablem);
-				    JScrollPane scrollPane=new JScrollPane(table);
-				    scrollPane.setBounds(0, 200, 500, 300);
-					opPanel.add(scrollPane);*/
-					addTable();
+					if(textfields[5].getText().trim().equals("")||textfields[6].getText().trim().equals("")||textfields[7].getText().trim().equals("")||textfields[11].getText().trim().equals("")||textfields[12].getText().trim().equals("")||textfields[13].getText().trim().equals("")){
+						con.setMessageText("graphics/option_error_empty.png");
+					}else{
+						instruction="IMPORT_SHO:"+textfields[5].getText().trim()+"/"+textfields[6].getText().trim()+"/"+textfields[7].getText().trim()+"；"+textfields[11].getText().trim()+"/"+textfields[12].getText().trim()+"/"+textfields[13].getText().trim();
+					    view.setInstruction(instruction);
+					    con.setInstruction();
+					    con.go();
+					    clearComponents();
+						opPanel.removeAll();
+						addTable();
+					}
 					break;
 				}
-				default:;
 				}
-				
+				String errorMessage=con.getMessageText();
+				System.out.println(errorMessage);
+				//initialopPanel();
+				if(!errorMessage.equals("")){
+				    messageLabel.setIcon(new ImageIcon(errorMessage));
+			    }
 				addOpPanel();
-				
-	           
 			}
-			
 		}
 		
 		class canL extends MouseAdapter implements ActionListener{
@@ -469,7 +455,6 @@ public class importGUI extends JPanel {
 				canBt.setIcon(new ImageIcon("graphics/cancel1.png"));
 				
 			}
-			
 			public void actionPerformed(ActionEvent e){
 				opPanel.removeAll();
 				initialopPanel();

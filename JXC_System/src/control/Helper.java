@@ -2,9 +2,7 @@ package control;
 import java.io.*;
 	import java.util.ArrayList;
 public class Helper {
-	
-	
-		String Filename;
+	    String Filename;
 		ArrayList<String>info=new ArrayList<String>();
 		public String[] sArray=new String[100];
 		public void setFilename(String Filename){
@@ -16,7 +14,6 @@ public class Helper {
 			try{
 				BufferedReader br=new BufferedReader(new InputStreamReader(System.in));
 				Inputline=br.readLine();
-				
 			}catch(IOException e){
 				System.out.println("IOException:"+e);
 			}
@@ -35,7 +32,6 @@ public class Helper {
 	    			info.add(temp);
 	    		}
 	    		br.close();
-			
 		}catch(IOException e){
 			System.out.println("IOException:"+e);
 			}
@@ -49,9 +45,8 @@ public class Helper {
 	    		PrintWriter pw=new PrintWriter(fos);
 	    		n=info.size();
 	    		for(i=0;i<n;i++){
-	    		pw.write(info.get(i).toString());
-	    		pw.write("\r\n");
-	    		
+	    		    pw.write(info.get(i).toString());
+	    		    pw.write("\r\n");
 	    		}
 	    		pw.flush();
 	    		pw.close();

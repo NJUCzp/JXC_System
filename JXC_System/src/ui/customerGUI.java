@@ -20,19 +20,15 @@ public class customerGUI extends JPanel {
 	private Point[] points=new Point[]{new Point(0,110),new Point(0,170),new Point(0,230),new Point(0,290),new Point(0,350),new Point(810,20),new Point(910,20)};
 	public ImageIcon[] OPTION_BUTTONS=new ImageIcon[]{new ImageIcon("graphics/customer/customer_add.png"),new ImageIcon ("graphics/customer/customer_del.png"),new ImageIcon("graphics/customer/customer_upd.png"),new ImageIcon("graphics/customer/customer_fin.png"),new ImageIcon("graphics/back.png"),new ImageIcon("graphics/ring.png"),new ImageIcon("graphics/ring.png")};
 	public ImageIcon[] OPTION_BUTTONS_ENTERED=new ImageIcon[]{new ImageIcon("graphics/customer/customer_add2.png"),new ImageIcon ("graphics/customer/customer_del2.png"),new ImageIcon("graphics/customer/customer_upd2.png"),new ImageIcon("graphics/customer/customer_fin2.png"),new ImageIcon("graphics/back.png"),new ImageIcon("graphics/minimize.png"),new ImageIcon("graphics/close.png")};
-	
-	//JButton[] buttons=new JButton[]{new JButton("添加客户"),new JButton("删除客户"),new JButton("更新客户"),new JButton("查找客户"),new JButton("后退")};
-	//Point[] points=new Point[]{new Point(20,100),new Point(20,175),new Point(20,250),new Point(20,325),new Point(20,475)};
 	JButton[] buttons=new JButton[7];
 	Image bg=new ImageIcon("graphics/option_background.png").getImage();
 	JPanel opPanel=new JPanel();
+	JLabel messageLabel=new JLabel();
 	JLabel customerLb=new JLabel(new ImageIcon("graphics/customer/customer_name.png"));
     JLabel numberLb=new JLabel(new ImageIcon("graphics/customer/customer_phoneNumber.png"));
     JTextField cusTf=new JTextField(25);
     JTextField numTf=new JTextField(25);
-    
     JTable table;    
-    
     JButton yesBt=new JButton(new ImageIcon("graphics/confirm1.png"));
     JButton canBt=new JButton(new ImageIcon("graphics/cancel1.png"));
     
@@ -55,11 +51,14 @@ public class customerGUI extends JPanel {
 		opPanel.setLayout(null);
         opPanel.setVisible(true);
         opPanel.setOpaque(false);
+        messageLabel.setOpaque(false);
+        messageLabel.setBounds(270, 580, 754, 188);
 		this.add(opPanel);
+        this.add(messageLabel);
 		jframe.setContentPane(this);
 	}
 	public void addTable(){
-		String[] colomn={"客户姓名","联系方式","应收账款金额","应付账款金额","合计"};
+		String[] colomn={"选择","客户姓名","联系方式","应收账款金额","应付账款金额","合计"};
 
 		DefaultTableModel tablem=new DefaultTableModel(con.getMessageTable(),colomn){
 			public boolean isCellEditable(int row,int colomn) {
@@ -87,6 +86,7 @@ public class customerGUI extends JPanel {
 	
 	
 	public void initialopPanel(){
+        messageLabel.setIcon(new ImageIcon("graphics/option_message_default.png"));
 		view.setInstruction("CUSTOMER_SHO:");
 		con.setInstruction();
 		con.go();		
@@ -195,7 +195,7 @@ public class customerGUI extends JPanel {
 			jframe.setContentPane(customer);
 			opPanel.removeAll();
 			clearComponents();
-			
+			messageLabel.setIcon(new ImageIcon("graphics/option_message_default.png"));
 					
 			opPanel.add(customerLb);
 		    opPanel.add(numberLb);
@@ -240,6 +240,7 @@ public class customerGUI extends JPanel {
 			
 			opPanel.removeAll();
 			clearComponents();
+			messageLabel.setIcon(new ImageIcon("graphics/option_message_default.png"));
 		
 		    
 			opPanel.add(customerLb);
@@ -268,7 +269,7 @@ public class customerGUI extends JPanel {
 			jframe.setContentPane(customer);
 			opPanel.removeAll();
 			clearComponents();
-			
+			messageLabel.setIcon(new ImageIcon("graphics/option_message_default.png"));
 			
 			opPanel.add(customerLb);
 			opPanel.add(cusTf);
@@ -316,21 +317,42 @@ public class customerGUI extends JPanel {
 			public void actionPerformed(ActionEvent e){
 				switch (currentPage){
 				
-				case 0:{instruction="CUSTOMER_ADD:"+cusTf.getText().trim()+"；"+numTf.getText().trim();
+				case 0:{
+					if(cusTf.getText().trim().equals("")||numTf.getText().trim().equals("")){
+						con.setMessageText("graphics/option_error_empty.png");
+					}else{
+						instruction="CUSTOMER_ADD:"+cusTf.getText().trim()+"；"+numTf.getText().trim();
+						view.setInstruction(instruction);
+						con.setInstruction();
+						con.go();
+					}
 				    break;
 				}
-				case 2:{instruction="CUSTOMER_UPD:"+cusTf.getText().trim()+"；"+numTf.getText().trim();
+				case 2:{
+					if(cusTf.getText().trim().equals("")||numTf.getText().trim().equals("")){
+						con.setMessageText("graphics/option_error_empty.png");
+					}else{
+						instruction="CUSTOMER_UPD:"+cusTf.getText().trim()+"；"+numTf.getText().trim();
+						view.setInstruction(instruction);
+						con.setInstruction();
+						con.go();
+					}
 				    break;
 				}
-				case 3:{instruction="CUSTOMER_FIN:"+cusTf.getText().trim();
+				case 3:{
+					if(cusTf.getText().trim().equals("")){
+						con.setMessageText("graphics/option_error_empty.png");
+					}else{
+						instruction="CUSTOMER_FIN:"+cusTf.getText().trim();
+						view.setInstruction(instruction);
+						con.setInstruction();
+						con.go();
+					}
 			        break;
 			    }
 				
 				}
 				
-				view.setInstruction(instruction);
-				con.setInstruction();
-				con.go();
 
 				clearComponents();
 				opPanel.removeAll();
@@ -346,7 +368,18 @@ public class customerGUI extends JPanel {
 					opPanel.add(canBt);
 					break;
 				}
-				default:initialopPanel();
+				default:{
+					buttons[1].setEnabled(true);
+					buttons[1].setIcon(OPTION_BUTTONS[1]);
+					String errorMessage=con.getMessageText();
+					System.out.println(errorMessage);
+					initialopPanel();
+					//System.out.println(con.getMessageText());
+					if(!errorMessage.equals("")){
+					    messageLabel.setIcon(new ImageIcon(errorMessage));
+				    }
+					break;
+				}
 				}
 				
 				addOpPanel();

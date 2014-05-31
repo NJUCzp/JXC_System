@@ -7,7 +7,7 @@ import data.customer;
 
 public class CustomerManagement {
 	String instruction;
-	String messageText=null;
+	String messageText="";
 	Object[][] messageTable;
 	ArrayList<String>info=new ArrayList<String>();
 	ArrayList<customer>cus=new  ArrayList<customer>();
@@ -39,9 +39,22 @@ public class CustomerManagement {
 		switch (keyword){
 		case 'A':{
 			String s=instruction.substring(4)+"；0；0；0";
+			boolean alreadyHere=false;
+			helper.split(s);
+			for(int i=0;i<cus.size();i++){
+				if(cus.get(i).getName().equals(helper.sArray[0])){
+					alreadyHere=true;
+				}
+			}
+			if(!alreadyHere){
+				info.add(s);
+				System.out.println("成功添加！");
+				messageText="graphics/success_add.png";
+			}else{
+				messageText="graphics/commodity_error_add.png";
+			}
 			//System.out.println(s);
-			info.add(s);
-			System.out.println("成功添加！");
+			
 			helper.output(info);
 			break;
 		}
@@ -63,8 +76,10 @@ public class CustomerManagement {
 				}
 			}
 			if(n1==n){
+				messageText="graphics/customer/customer_error_del.png";
 				System.out.println("删除失败！");
 			}else{
+				messageText="graphics/success_del.png";
 				System.out.println("已从客户列表中删除！");
 			} 
 			helper.output(info);
@@ -91,8 +106,10 @@ public class CustomerManagement {
 				}
 			}
 			if(n1==n){
+				messageText="graphics/commodity/commodity_error_upd.png";
 				System.out.println("原来无此客户！");
 			}else{
+				messageText="graphics/success_del.png";
 				System.out.println("已成功更新！");
 			} 
 			helper.output(info);

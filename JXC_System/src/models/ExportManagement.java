@@ -10,20 +10,58 @@ import data.customer;
 public class ExportManagement {
 	String instruction;
 	Object[][] messageTable;
+	String messageText="";
 	Helper helper=new Helper();
 	ArrayList<String>exinfo=new ArrayList<String>();
+	ArrayList<String>cominfo=new ArrayList<String>();
+	ArrayList<commodity>com=new  ArrayList<commodity>();
+	ArrayList<String>cusinfo=new ArrayList<String>();
+	ArrayList<customer>cus=new ArrayList<customer>();
 	public void setInstruction(String instruction){
 		this.instruction=instruction;
-		
 	}
-	
-	public void go(){
-		helper.setFilename("data/exportsheet.txt");
-		exinfo=helper.readfile();
+	public void getInfo(){
+		Helper helper1=new Helper();
+		helper1.setFilename("data/exportsheet.txt");
+		exinfo=helper1.readfile();
 		if(exinfo.get(0).equals("")){
 			exinfo.clear();
 		}
+		Helper helper2=new Helper();
+		helper2.setFilename("data/commodity.txt");
+		cominfo=helper2.readfile();
+		for(int i=0;i<cominfo.size();i++){
+			commodity tempcom=new commodity();
+			helper2.split(cominfo.get(i));
+			tempcom.setName(helper2.sArray[0]);
+	        tempcom.setNumber(helper2.sArray[1] );
+	        tempcom.setQuantity(Integer.parseInt(helper2.sArray[2]));
+	        tempcom.setDefaultImportPrice(Integer.parseInt(helper2.sArray[3]));
+	        tempcom.setDefaultExportPrice(Integer.parseInt(helper2.sArray[4]));
+	        tempcom.setLatestImportPrice(Integer.parseInt(helper2.sArray[5]));
+	        tempcom.setLatestExportPrice(Integer.parseInt(helper2.sArray[6]));
+			com.add(tempcom);
+		}
+		
+		Helper helper3=new Helper();
+		helper3.setFilename("data/customer.txt");
+		cusinfo=helper3.readfile();
+		for(int i=0;i<cusinfo.size();i++){
+			System.out.println(cusinfo.get(i));
+			customer tempcus=new customer();
+			helper3.split(cusinfo.get(i));
+			tempcus.setName(helper3.sArray[0]);
+			tempcus.setPhoneNumber(helper3.sArray[1]);
+			tempcus.setNeedToReceive(Integer.parseInt(helper3.sArray[2]));
+			tempcus.setNeedToPay(Integer.parseInt(helper3.sArray[3]));
+			tempcus.setTotal(Integer.parseInt(helper3.sArray[4]));
+			cus.add(tempcus);
+		}
+	}
+	public void go(){
+		
 		char keyword=instruction.charAt(0);
+		getInfo();
 		switch(keyword){
 		case 'A':{
 			helper.split(instruction.substring(4));
@@ -33,18 +71,29 @@ public class ExportManagement {
 			int exprice=Integer.parseInt(helper.sArray[4]);
 			int cashRec=quantity*exprice;
 			int n=exinfo.size();
-
+			boolean cusExist=false;
+			boolean comExist=false;
+			for(int i=0;i<com.size();i++){
+				if(com.get(i).getName().equals(commodityName))
+					comExist=true;
+			}
+			for(int i=0;i<cus.size();i++){
+				if(cus.get(i).getName().equals(cusName))
+					cusExist=true;
+			}
+			if((!comExist)&&(!cusExist)){
+				exinfo.add(instruction+"；"+cashRec+"；"+n+"");
+				helper.output(exinfo);
+				System.out.println("添加成功！");
+				messageText="graphics/success_add.png";
+				changeCommodity(commodityName,0,exprice,-quantity);
+				changeAccount(0,cashRec);
+				changeCustomer(cusName,0,cashRec);
+				changeHistory(commodityName);
+			}else{
+				messageText="graphics/export/export_error_add.png";
+			}
 			
-			exinfo.add(instruction+"；"+cashRec+"；"+n+"");
-			helper.output(exinfo);
-			System.out.println("添加成功！");
-			
-			//添加一个检查客户是否存在的程序段
-			
-			changeCommodity(commodityName,0,exprice,-quantity);
-			changeAccount(0,cashRec);
-			changeCustomer(cusName,0,cashRec);
-			changeHistory(commodityName);
 			break;
 		}
 		case 'D':{
@@ -68,16 +117,23 @@ public class ExportManagement {
 			            go();
 			            setInstruction("ADD:"+cusName.substring(4)+"；"+commodityName+"；"+number+"；"+(tempquantity-quantity)+""+"；"+exprice+""+"；"+date);
 			            go();
+		        		messageText="graphics/import_success_del.png";
 			        }else{
-			            int cashRec=tempquantity*exprice;
-			            exinfo.add("DEL:"+cusName.substring(4)+"；"+commodityName+"；"+number+"；"+tempquantity+"；"+exprice+""+"；"+date+"；"+cashRec+""+"；"+sheetNumber);
-			            helper.output(exinfo);
-			            System.out.println("添加成功！");
-			
-			
-			            changeCommodity(commodityName,0,exprice,quantity);
-						changeAccount(0,-cashRec);
-						changeCustomer(cusName,0,-cashRec);
+			        	if(quantity==tempquantity){
+			        		int cashRec=tempquantity*exprice;
+				            exinfo.add("DEL:"+cusName.substring(4)+"；"+commodityName+"；"+number+"；"+tempquantity+"；"+exprice+""+"；"+date+"；"+cashRec+""+"；"+sheetNumber);
+				            helper.output(exinfo);
+				            System.out.println("添加成功！");
+				
+				
+				            changeCommodity(commodityName,0,exprice,quantity);
+							changeAccount(0,-cashRec);
+							changeCustomer(cusName,0,-cashRec);
+			        		messageText="graphics/import_success_del.png";
+			        	}else{
+			        		messageText="graphics/export/export_error_del.png";
+			        	}
+			            
 			            break;
 			        }
 
@@ -148,7 +204,6 @@ public class ExportManagement {
 			    messageTable[i][8]=helper.sArray[6];
 			    messageTable[i][9]=helper.sArray[7];
 			}
-			
 			break;
 		}
 		default:System.out.println("格式错误！");
@@ -157,26 +212,10 @@ public class ExportManagement {
 	
 	public void changeCommodity(String commodityName,int imprice,int exprice,int quantity){
 		Helper helper=new Helper();
-		ArrayList<String>info=new ArrayList<String>();
-		ArrayList<commodity>com=new  ArrayList<commodity>();
+		
 		String newinfo="";
-		helper.setFilename("data/commodity.txt");
-		info=helper.readfile();
-		int n=info.size();
-		for(int i=0;i<n;i++){
-			helper.split(info.get(i));
-			commodity tempcom=new commodity();
-			tempcom.setName(helper.sArray[0]);
-	        tempcom.setNumber(helper.sArray[1] );
-	        tempcom.setQuantity(Integer.parseInt(helper.sArray[2]));
-	        tempcom.setDefaultImportPrice(Integer.parseInt(helper.sArray[3]));
-	        tempcom.setDefaultExportPrice(Integer.parseInt(helper.sArray[4]));
-	        tempcom.setLatestImportPrice(Integer.parseInt(helper.sArray[5]));
-	        tempcom.setLatestExportPrice(Integer.parseInt(helper.sArray[6]));
-			com.add(tempcom);
+		int n=cominfo.size();
 
-
-		}
 		
 		for(int i=0;i<n;i++){
 			if(com.get(i).getName().equals(commodityName)){
@@ -190,12 +229,11 @@ public class ExportManagement {
 		int n1=n;
 		
 		for(int i=0;i<n;i++){
-			helper.split(info.get(i));
+			helper.split(cominfo.get(i));
 			String name2=helper.sArray[0];
-			//System.out.println(name1+" "+name2);
 			if(commodityName.equals(name2)){
-				info.remove(i);
-				info.add(newinfo);
+				cominfo.remove(i);
+				cominfo.add(newinfo);
 				//i--;
 				n1--;
 			}
@@ -203,8 +241,8 @@ public class ExportManagement {
 		if(n1==n){
 			System.out.println("原来无此商品！");
 		}
-		
-		helper.output(info);
+		helper.setFilename("data/commodity.txt");
+		helper.output(cominfo);
 		
 	
 	}
@@ -235,22 +273,10 @@ public class ExportManagement {
 		
 		
 		Helper helper=new Helper();
-		ArrayList<String>info=new ArrayList<String>();
-		ArrayList<customer>cus=new  ArrayList<customer>();
+		
 		String newinfo="";
-		helper.setFilename("data/customer.txt");
-		info=helper.readfile();
-		int n=info.size();
-		for(int i=0;i<n;i++){
-			customer tempcus=new customer();
-			helper.split(info.get(i));
-			tempcus.setName(helper.sArray[0]);
-			tempcus.setPhoneNumber(helper.sArray[1]);
-			tempcus.setNeedToReceive(Integer.parseInt(helper.sArray[2]));
-			tempcus.setNeedToPay(Integer.parseInt(helper.sArray[3]));
-			tempcus.setTotal(Integer.parseInt(helper.sArray[4]));
-			cus.add(tempcus);
-		}
+		int n=cusinfo.size();
+
 		
 		for(int i=0;i<n;i++){
 			//System.out.println(cus.get(i).name.equals(cusName));
@@ -269,18 +295,18 @@ public class ExportManagement {
 		String name1=helper.sArray[0];
 		
 		for(int i=0;i<n;i++){
-			helper.split(info.get(i));
+			helper.split(cusinfo.get(i));
 			String name2=helper.sArray[0];
 			//System.out.println(name1+" "+name2);
 			if(name1.equals(name2)){
-				info.remove(i);
-				info.add(newinfo);
+				cusinfo.remove(i);
+				cusinfo.add(newinfo);
 				//i--;
 			}
 		}
 		
-		
-		helper.output(info);
+		helper.setFilename("data/customer.txt");
+		helper.output(cusinfo);
 		
 	}
 	
@@ -295,6 +321,10 @@ public class ExportManagement {
 	public Object[][] getMessageTable(){
 		return messageTable;
 	}
+	public String getMessageText(){
+		return messageText;
+	}
+
 
 
 }

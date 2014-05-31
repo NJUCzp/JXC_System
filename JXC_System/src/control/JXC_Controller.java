@@ -1,5 +1,4 @@
 package control;
-//import JXC_Model;
 import models.AccountManagement;
 import models.CommodityManagement;
 import models.CustomerManagement;
@@ -11,19 +10,21 @@ import ui.JXC_View;
 
 
 public class JXC_Controller {
-	//JXC_Model jxcmodel;
 	JXC_View jxcview;
 	public JXC_Controller(JXC_View view){
 		jxcview=view;
 	}
 	
 	String instruction;
-	String messageText;
+	String messageText="";
 	Object messageTable[][];
 	public void setInstruction(){
 		instruction=jxcview.getInstruction();
 	}
 	
+	public void setMessageText(String s){
+		messageText=s;
+	}
 	public String getMessageText(){
 		return messageText;
 	}
@@ -49,17 +50,18 @@ public class JXC_Controller {
 			if(instruction.substring(10).charAt(0)=='S'||instruction.substring(10).charAt(0)=='F'){
 				messageTable=commodity.getMessageTable();
 			}
+			setMessageText(commodity.getMessageText());
 			break;
 		}
 		case "AC":{
 			account.setInstruction(instruction.substring(8));
 			account.go();
-			if(instruction.substring(8).charAt(0)=='A'){
-				messageText=account.getMessageText();
-			}
+
 			if(instruction.substring(8).charAt(0)=='D'){
 				messageTable=account.getMessageTable();
 			}
+			setMessageText(account.getMessageText());
+
 			break;
 		}
 		case "CU":{
@@ -68,6 +70,8 @@ public class JXC_Controller {
 			if(instruction.substring(9).charAt(0)=='S'||instruction.substring(9).charAt(0)=='F'){
 				messageTable=customer.getMessageTable();
 			}
+			setMessageText(customer.getMessageText());
+
 			break;
 		}
 		case "EX":{
@@ -79,6 +83,8 @@ public class JXC_Controller {
 			if(instruction.substring(7).charAt(0)=='S'){
 				messageTable=exporter.getMessageTable();
 			}
+			setMessageText(exporter.getMessageText());
+
 			break;
 		}
 		case "IM":{
@@ -90,6 +96,8 @@ public class JXC_Controller {
 			if(instruction.substring(7).charAt(0)=='S'){
 				messageTable=importer.getMessageTable();
 			}
+			setMessageText(importer.getMessageText());
+
 			break;
 		}
 		case "ST":{

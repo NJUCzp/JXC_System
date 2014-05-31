@@ -8,7 +8,7 @@ import data.customer;
 
 public class AccountManagement {
 	String instruction;
-	String messageText=null;
+	String messageText="";
 	String[][] messageTable=new String[100][5];
 	int allInStock;
 	int allNeedToPay;
@@ -64,6 +64,7 @@ public class AccountManagement {
 			
 			outputAccSheet(date,"IN",name,cashReceive);
 			
+			messageText="graphics/acount/account_success_in.png";
 			System.out.println("收款成功！");
 			
 			changeCusInfo(name,cashReceive,0);
@@ -88,7 +89,7 @@ public class AccountManagement {
 			
 			outputAccSheet(date,"OUT",name,cashPay);
 
-			
+			messageText="graphics/acount/account_success_out.png";
 			System.out.println("付款成功！");
 			
 			changeCusInfo(name,0,cashPay);
@@ -129,7 +130,7 @@ public class AccountManagement {
 			acc.get(0).setAllNeedToReceive(0);
 			
 			outputAccInfo();
-			
+			messageText="graphics/acount/account_success_ini.png";
 			System.out.println("初始化成功！");
 			break;
 		}

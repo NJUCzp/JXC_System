@@ -22,6 +22,8 @@ public class commodityGUI extends JPanel {
 	JButton[] buttons=new JButton[7];
 	Image bg=new ImageIcon("graphics/option_background.png").getImage();
 	JPanel opPanel=new JPanel();
+	//JPanel messagePanel=new JPanel();
+	JLabel messageLabel=new JLabel();
 	JLabel commodityLb=new JLabel(new ImageIcon("graphics/commodity/commodity_name.png"));
     JLabel numberLb=new JLabel(new ImageIcon("graphics/commodity/commodity_number.png"));
     JLabel defaultImLb=new JLabel(new ImageIcon("graphics/commodity/commodity_defaultIm.png"));
@@ -54,7 +56,10 @@ public class commodityGUI extends JPanel {
 		opPanel.setLayout(null);
         opPanel.setVisible(true);
         opPanel.setOpaque(false);
+        messageLabel.setOpaque(false);
+        messageLabel.setBounds(270, 580, 754, 188);
 		this.add(opPanel);
+        this.add(messageLabel);
 		jframe.setContentPane(this);
 	}
 	public void addTable(){
@@ -87,11 +92,11 @@ public class commodityGUI extends JPanel {
 		
 	}
 	public void initialopPanel(){
+        messageLabel.setIcon(new ImageIcon("graphics/option_message_default.png"));
 		view.setInstruction("COMMODITY_SHO:");
 		con.setInstruction();
 		con.go();
 		addTable();
-		
 	}
 	public void initialButton(){
 
@@ -204,7 +209,7 @@ public class commodityGUI extends JPanel {
 			jframe.setContentPane(commodity);
 			opPanel.removeAll();
 			clearComponents();
-			
+			messageLabel.setIcon(new ImageIcon("graphics/option_message_default.png"));
 					
 			opPanel.add(commodityLb);
 		    opPanel.add(numberLb);
@@ -250,8 +255,8 @@ public class commodityGUI extends JPanel {
 			jframe.setContentPane(commodity);
 			opPanel.removeAll();
 			clearComponents();
+			messageLabel.setIcon(new ImageIcon("graphics/option_message_default.png"));
 		
-		    
 			opPanel.add(commodityLb);
 		    opPanel.add(numberLb);
 		    opPanel.add(defaultImLb);
@@ -283,7 +288,7 @@ public class commodityGUI extends JPanel {
 			jframe.setContentPane(commodity);
 			opPanel.removeAll();
 			clearComponents();
-			
+			messageLabel.setIcon(new ImageIcon("graphics/option_message_default.png"));
 			
 			opPanel.add(commodityLb);
 			opPanel.add(numberLb);
@@ -332,51 +337,67 @@ public class commodityGUI extends JPanel {
 			
 			public void actionPerformed(ActionEvent e){
 				switch (currentPage){
-				
-				case 0:{instruction="COMMODITY_ADD:"+comTf.getText().trim()+"£»"+numTf.getText().trim()+"£»"+imTf.getText().trim()+"£»"+exTf.getText().trim();
+				case 0:{
+					if(comTf.getText().trim().equals("")||numTf.getText().trim().equals("")||imTf.getText().trim().equals("")||exTf.getText().trim().equals("")){
+						con.setMessageText("graphics/option_error_empty.png");
+					}else{
+						instruction="COMMODITY_ADD:"+comTf.getText().trim()+"£»"+numTf.getText().trim()+"£»"+imTf.getText().trim()+"£»"+exTf.getText().trim();
+						view.setInstruction(instruction);
+						con.setInstruction();
+						con.go();
+					}						
 				    break;
 				}
-				case 2:{instruction="COMMODITY_UPD:"+comTf.getText().trim()+"£»"+numTf.getText().trim()+"£»"+imTf.getText().trim()+"£»"+exTf.getText().trim();
+				case 2:{
+					if(comTf.getText().trim().equals("")||numTf.getText().trim().equals("")||imTf.getText().trim().equals("")||exTf.getText().trim().equals("")){
+						con.setMessageText("graphics/option_error_empty.png");
+					}else{
+						instruction="COMMODITY_UPD:"+comTf.getText().trim()+"£»"+numTf.getText().trim()+"£»"+imTf.getText().trim()+"£»"+exTf.getText().trim();
+						view.setInstruction(instruction);
+						con.setInstruction();
+						con.go();
+					}
 				    break;
 				}
-				case 3:{instruction="COMMODITY_FIN:"+comTf.getText().trim()+"£»"+numTf.getText().trim();
-			        break;
+				case 3:{
+					if(comTf.getText().trim().equals("")||numTf.getText().trim().equals("")){
+						con.setMessageText("graphics/option_error_empty.png");
+					}else{
+						instruction="COMMODITY_FIN:"+comTf.getText().trim()+"£»"+numTf.getText().trim();
+					    view.setInstruction(instruction);
+					    con.setInstruction();
+					    con.go();
+				        break;
+					}
+					
 			    }
 				}
-				
-				view.setInstruction(instruction);
-				con.setInstruction();
-				con.go();
-
 				clearComponents();
 				opPanel.removeAll();
 				
-				
 				switch (currentPage){
 				case 3:{
-					
-					/*JLabel label=new JLabel(con.getMessageText());
-					System.out.println("Message text: "+con.getMessageText());
-					label.setBounds(50, 200,300,300);
-					opPanel.add(label);*/
-					
 					buttons[1].setEnabled(true);
 					buttons[1].setIcon(OPTION_BUTTONS[1]);
 					addTable();
 					opPanel.add(canBt);
 					break;
 				}
-				
 				default:{
 					buttons[1].setEnabled(true);
+					buttons[1].setIcon(OPTION_BUTTONS[1]);
+					String errorMessage=con.getMessageText();
+					System.out.println(errorMessage);
 					initialopPanel();
+					//System.out.println(con.getMessageText());
+					if(!errorMessage.equals("")){
+					    messageLabel.setIcon(new ImageIcon(errorMessage));
+				    }
+					break;
 				}
 				}
-				
-				opPanel.repaint();
+				//System.out.println(con.getMessageText());
 				addOpPanel();
-				
-	           
 			}
 			
 		}
@@ -392,9 +413,6 @@ public class commodityGUI extends JPanel {
 			}
 			public void actionPerformed(ActionEvent e){
 				opPanel.removeAll();
-				//initialopPanel();
-				//initialButton();
-				//addOpPanel();
 				jframe.setContentPane(new commodityGUI(jframe));
 			}
 			

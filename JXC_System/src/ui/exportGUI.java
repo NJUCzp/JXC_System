@@ -25,6 +25,7 @@ public class exportGUI extends JPanel {
 	Image bg=new ImageIcon("graphics/option_background.png").getImage();
 	JButton[] buttons=new JButton[6];
 	JPanel opPanel=new JPanel();
+	JLabel messageLabel=new JLabel();
 	JLabel customerLb=new JLabel(new ImageIcon("graphics/customer/customer_name.png"));
 	JLabel commodityLb=new JLabel(new ImageIcon("graphics/commodity/commodity_name.png"));
     JLabel numberLb=new JLabel(new ImageIcon("graphics/commodity/commodity_number.png"));
@@ -46,9 +47,6 @@ public class exportGUI extends JPanel {
     JTextField sheTf=new JTextField(25);
     JTextField staTf=new JTextField(25);
     JTextField endTf=new JTextField(25);*/
-
-    
-    
     JButton yesBt=new JButton(new ImageIcon("graphics/confirm1.png"));
     JButton canBt=new JButton(new ImageIcon("graphics/cancel1.png"));
     
@@ -101,10 +99,14 @@ public class exportGUI extends JPanel {
 		opPanel.setLayout(null);
         opPanel.setVisible(true);
         opPanel.setOpaque(false);
+        messageLabel.setOpaque(false);
+        messageLabel.setBounds(270, 580, 754, 188);
 		this.add(opPanel);
+        this.add(messageLabel);
 		jframe.setContentPane(this);
 	}
 	public void initialopPanel(){
+		messageLabel.setIcon(new ImageIcon("graphics/option_message_default.png"));
 		view.setInstruction("EXPORT_WHOLE:");
 		con.setInstruction();
 		con.go();
@@ -217,7 +219,8 @@ public class exportGUI extends JPanel {
 			//添加销售单
 			opPanel.removeAll();
 			clearComponents();
-			
+	        messageLabel.setIcon(new ImageIcon("graphics/option_message_default.png"));
+
 			for(int j=0;j<8;j++){
 				opPanel.add(textfields[j]);
 			}		
@@ -238,7 +241,8 @@ public class exportGUI extends JPanel {
 			//添加销售退货单
 			opPanel.removeAll();
 			clearComponents();
-			
+	        messageLabel.setIcon(new ImageIcon("graphics/option_message_default.png"));
+
 			
 			timeLb.setBounds(160, 180, 550, 60);
 			opPanel.add(sheetLb);
@@ -275,7 +279,8 @@ public class exportGUI extends JPanel {
 			//显示单据
 			opPanel.removeAll();
 			clearComponents();
-			
+	        messageLabel.setIcon(new ImageIcon("graphics/option_message_default.png"));
+
 			opPanel.add(startLb);
 			opPanel.add(endLb);
 			textfields[5].setBounds(270, 38, 50, 20);
@@ -343,7 +348,11 @@ public class exportGUI extends JPanel {
 						con.setInstruction();
 						con.go();
 						opPanel.removeAll();
+						String errorMessage=con.getMessageText();
 						initialopPanel();
+						if(!errorMessage.equals("")){
+						    messageLabel.setIcon(new ImageIcon(errorMessage));
+					    }
 						addOpPanel();
 					}
 				});
@@ -405,57 +414,54 @@ public class exportGUI extends JPanel {
 				
 				switch (currentPage){
 				
-				case 0:{instruction="EXPORT_ADD:"+textfields[0].getText().trim()+"；"+textfields[1].getText().trim()+"；"+textfields[2].getText().trim()+"；"+textfields[3].getText().trim()+"；"+textfields[4].getText().trim()+"；"+textfields[5].getText().trim()+"/"+textfields[6].getText().trim()+"/"+textfields[7].getText().trim();
-				    opPanel.removeAll();
-				    JLabel label=new JLabel("<html>"+"                    确认如下销售？"+"<br>"+"-----------------------------------------------------------"+"<br><br>"+"客户姓名："+textfields[0].getText().trim()+"<br><br>"+"商品名称："+textfields[1].getText().trim()+"<br><br>"+"商品型号："+textfields[2].getText().trim()+"<br><br>"+"数量："+textfields[3].getText().trim()+"<br><br>"+"单价："+textfields[4].getText().trim()+"<br><br>"+"时间"+textfields[5].getText().trim()+"/"+textfields[6].getText().trim()+"/"+textfields[7].getText().trim()+"<br><br>"+"---------------------------------------------------------"+"</html>");
-					addConfirmPanel(label);
+				case 0:{
+					if(textfields[0].getText().trim().equals("")||textfields[1].getText().trim().equals("")||textfields[2].getText().trim().equals("")||textfields[3].getText().trim().equals("")||textfields[4].getText().trim().equals("")||textfields[5].getText().trim().equals("")||textfields[6].getText().trim().equals("")||textfields[7].getText().trim().equals("")){
+						con.setMessageText("graphics/option_error_empty.png");
+					}else{
+						instruction="EXPORT_ADD:"+textfields[0].getText().trim()+"；"+textfields[1].getText().trim()+"；"+textfields[2].getText().trim()+"；"+textfields[3].getText().trim()+"；"+textfields[4].getText().trim()+"；"+textfields[5].getText().trim()+"/"+textfields[6].getText().trim()+"/"+textfields[7].getText().trim();
+					    opPanel.removeAll();
+					    JLabel label=new JLabel("<html>"+"                    确认如下销售？"+"<br>"+"-----------------------------------------------------------"+"<br><br>"+"客户姓名："+textfields[0].getText().trim()+"<br><br>"+"商品名称："+textfields[1].getText().trim()+"<br><br>"+"商品型号："+textfields[2].getText().trim()+"<br><br>"+"数量："+textfields[3].getText().trim()+"<br><br>"+"单价："+textfields[4].getText().trim()+"<br><br>"+"时间"+textfields[5].getText().trim()+"/"+textfields[6].getText().trim()+"/"+textfields[7].getText().trim()+"<br><br>"+"---------------------------------------------------------"+"</html>");
+						addConfirmPanel(label);
+					}
 				    break;
 				}
-				case 1:{instruction="EXPORT_DEL:"+textfields[8].getText().trim()+"；"+textfields[3].getText().trim()+"；"+textfields[5].getText().trim()+"/"+textfields[6].getText().trim()+"/"+textfields[7].getText().trim();
-				    opPanel.removeAll();
-				    JLabel label=new JLabel("<html>"+"确认如下销售退货单？"+"<br>"+"-------------------------"+"<br>"+"进货单号："+textfields[8].getText().trim()+"<br>"+"退货数量："+textfields[3].getText().trim()+"<br>"+"日期："+textfields[5].getText().trim()+"/"+textfields[6].getText().trim()+"/"+textfields[7].getText().trim()+"<br>"+"---------------------------"+"</html>");
-				    addConfirmPanel(label);
-				    break;
-				}
-				case 2:{instruction="EXPORT_SHO:"+textfields[5].getText().trim()+"/"+textfields[6].getText().trim()+"/"+textfields[7].getText().trim()+"；"+textfields[11].getText().trim()+"/"+textfields[12].getText().trim()+"/"+textfields[13].getText().trim();
-				    view.setInstruction(instruction);
-				    con.setInstruction();
-				    con.go();
-				    
-				    clearComponents();
-					opPanel.removeAll();
+				case 1:{
+					if(textfields[8].getText().trim().equals("")||textfields[3].getText().trim().equals("")||textfields[5].getText().trim().equals("")||textfields[6].getText().trim().equals("")||textfields[7].getText().trim().equals("")){
+						con.setMessageText("graphics/option_error_empty.png");
+					}else{
+						instruction="EXPORT_DEL:"+textfields[8].getText().trim()+"；"+textfields[3].getText().trim()+"；"+textfields[5].getText().trim()+"/"+textfields[6].getText().trim()+"/"+textfields[7].getText().trim();
+					    opPanel.removeAll();
+					    JLabel label=new JLabel("<html>"+"确认如下销售退货单？"+"<br>"+"-------------------------"+"<br>"+"进货单号："+textfields[8].getText().trim()+"<br>"+"退货数量："+textfields[3].getText().trim()+"<br>"+"日期："+textfields[5].getText().trim()+"/"+textfields[6].getText().trim()+"/"+textfields[7].getText().trim()+"<br>"+"---------------------------"+"</html>");
+					    addConfirmPanel(label);
+					}
 					
 				    break;
 				}
-				}
-				
-				
-
-				
-				switch (currentPage){
 				case 2:{
-					/*String[] colomn={"时间","单据性质","客户姓名","商品名称","商品型号","数量","单价","总价","对应销售单号"};
-
-
-					 DefaultTableModel tablem=new DefaultTableModel(con.getMessageTable(),colomn){
-				    	 public boolean isCellEditable(int row,int colomn) {
-				    	     return false;
-				    	    }
-				     };
-				     JTable table=new JTable();
-				     table.setModel(tablem);
-				    JScrollPane scrollPane=new JScrollPane(table);
-				    scrollPane.setBounds(0, 200, 500, 300);
-					opPanel.add(scrollPane);*/
-					addTable();
-					break;
+					if(textfields[5].getText().trim().equals("")||textfields[6].getText().trim().equals("")||textfields[7].getText().trim().equals("")||textfields[11].getText().trim().equals("")||textfields[12].getText().trim().equals("")||textfields[13].getText().trim().equals("")){
+						con.setMessageText("graphics/option_error_empty.png");
+					}else{
+						instruction="EXPORT_SHO:"+textfields[5].getText().trim()+"/"+textfields[6].getText().trim()+"/"+textfields[7].getText().trim()+"；"+textfields[11].getText().trim()+"/"+textfields[12].getText().trim()+"/"+textfields[13].getText().trim();
+					    view.setInstruction(instruction);
+					    con.setInstruction();
+					    con.go();
+					    clearComponents();
+						opPanel.removeAll();
+						addTable();
+					}					
+				    break;
 				}
-				default:;
 				}
 				
+				
+				String errorMessage=con.getMessageText();
+				System.out.println(errorMessage);
+				//initialopPanel();
+				if(!errorMessage.equals("")){
+				    messageLabel.setIcon(new ImageIcon(errorMessage));
+			    }
 				addOpPanel();
-				
-	           
+			   
 			}
 			
 		}

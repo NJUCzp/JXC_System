@@ -7,7 +7,7 @@ import data.commodity;
 
 public class CommodityManagement {
 	String instruction;
-	String messageText=null;
+	String messageText="";
 	Object[][] messageTable;
 	ArrayList<String>info=new ArrayList<String>();
 	ArrayList<commodity>com=new  ArrayList<commodity>();
@@ -66,7 +66,9 @@ public class CommodityManagement {
 				newinfo=helper.sArray[0]+"；"+helper.sArray[1]+"；"+"0"+"；"+helper.sArray[2]+"；"+helper.sArray[3]+"；0；0";
 				info.add(newinfo);
 				System.out.println("成功添加！");
+				messageText="graphics/success_add.png";
 			}else{
+				messageText="graphics/commodity/commodity_error_add.png";
 				System.out.println("商品已存在");
 			}
 			
@@ -92,8 +94,10 @@ public class CommodityManagement {
 				}
 			}
 			if(n1==n){
+				messageText="graphics/commodity/commodity_error_del.png";
 				System.out.println("删除失败！");
 			}else{
+				messageText="graphics/success_del.png";
 				System.out.println("已从仓库删除！");
 			} 
 			helper.output(info);
@@ -126,8 +130,10 @@ public class CommodityManagement {
 				}
 			}
 			if(n1==n){
+				messageText="graphics/commodity/commodity_error_upd.png";
 				System.out.println("原来无此商品！");
 			}else{
+				messageText="graphics/success_upd.png";
 				System.out.println("已成功更新！");
 			} 
 			helper.output(info);

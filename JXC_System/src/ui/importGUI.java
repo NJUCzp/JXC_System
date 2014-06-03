@@ -16,8 +16,8 @@ public class importGUI extends JPanel {
 	JXC_View view=new JXC_View();
 	JXC_Controller con=new JXC_Controller(view);
 	private Point[] points=new Point[]{new Point(0,110),new Point(0,170),new Point(0,230),new Point(0,290),new Point(810,20),new Point(910,20)};
-	private Point[] tf_points=new Point[]{new Point(270, 38),new Point(270, 118),new Point(270, 198),new Point(270, 278),new Point(500, 278),new Point(270, 357),new Point(417,357),new Point(512,357),new Point(270, 38),new Point(150, 100),new Point(150, 175),new Point(270, 118),new Point(420,118),new Point(520,118)};
-    JTextField[] textfields=new JTextField[]{new JTextField(25),new JTextField(25),new JTextField(25),new JTextField(25),new JTextField(25),new JTextField(5),new JTextField(3),new JTextField(3),new JTextField(25),new JTextField(25),new JTextField(25),new JTextField(5),new JTextField(3),new JTextField(3)};
+	private Point[] tf_points=new Point[]{new Point(270, 38),new Point(270, 118),new Point(270, 198),new Point(270, 278),new Point(500, 278),new Point(270, 357),new Point(420,357),new Point(515,357),new Point(270, 38),new Point(150, 100),new Point(150, 175),new Point(270, 118),new Point(420,118),new Point(520,118)};
+    private JTextField[] textfields=new JTextField[]{new JTextField(25),new JTextField(25),new JTextField(25),new JTextField(25),new JTextField(25),new JTextField(5),new JTextField(3),new JTextField(3),new JTextField(25),new JTextField(25),new JTextField(25),new JTextField(5),new JTextField(3),new JTextField(3)};
 	public ImageIcon[] OPTION_BUTTONS=new ImageIcon[]{new ImageIcon("graphics/import/import_add.png"),new ImageIcon ("graphics/import/import_del.png"),new ImageIcon("graphics/import/import_sho.png"),new ImageIcon("graphics/back.png"),new ImageIcon("graphics/ring.png"),new ImageIcon("graphics/ring.png")};
 	public ImageIcon[] OPTION_BUTTONS_ENTERED=new ImageIcon[]{new ImageIcon("graphics/import/import_add2.png"),new ImageIcon ("graphics/import/import_del2.png"),new ImageIcon("graphics/import/import_sho2.png"),new ImageIcon("graphics/back.png"),new ImageIcon("graphics/minimize.png"),new ImageIcon("graphics/close.png")};
 	Image bg=new ImageIcon("graphics/option_background.png").getImage();
@@ -83,7 +83,7 @@ public class importGUI extends JPanel {
 	    this.table=table;
 	
         JScrollPane scrollPane=new JScrollPane(table);
-	    scrollPane.setBounds(0, 80, 500, 300);
+	    scrollPane.setBounds(80, 80, 600, 300);
 	     
 	    opPanel.add(scrollPane);
 		
@@ -224,43 +224,34 @@ public class importGUI extends JPanel {
 			opPanel.removeAll();
 			clearComponents();
 	        messageLabel.setIcon(new ImageIcon("graphics/option_message_default.png"));
-
-			timeLb.setBounds(160, 180, 550, 60);
-			opPanel.add(sheetLb);
-			opPanel.add(quaLb);
-			opPanel.add(timeLb);
-			
+			timeLb.setBounds(160, 180, 550, 60);			
 			textfields[3].setBounds(270, 118, 200, 20);
 			textfields[5].setBounds(270, 198, 50, 20);
 			textfields[6].setBounds(417, 198, 40, 20);
 			textfields[7].setBounds(512, 198, 40, 20);
+			
 
+			for(int j=0;j<table.getRowCount();j++){
+				System.out.println(table.getValueAt(j, 9).toString());
+				System.out.println(table.getValueAt(j, 6).toString());
+				if(Boolean.parseBoolean(table.getValueAt(j, 0).toString())&&table.getValueAt(j, 2).toString().equals("ADD")){
+					textfields[8].setText(table.getValueAt(j, 9).toString());
+					textfields[3].setText(table.getValueAt(j, 6).toString());
+					
+				    break;
+				}
+			}
+			opPanel.add(sheetLb);
+			opPanel.add(quaLb);
+			opPanel.add(timeLb);
 			opPanel.add(textfields[3]);
 			opPanel.add(textfields[5]);
 			opPanel.add(textfields[6]);
 			opPanel.add(textfields[7]);
 			opPanel.add(textfields[8]);
-
-			/*opPanel.add(yearTf);
-		    opPanel.add(monthTf);
-		    opPanel.add(dayTf);
-		    
-		    opPanel.add(sheTf);
-			opPanel.add(quaTf);*/
-			//opPanel.add(priTf);
-			
-			for(int j=0;j<table.getRowCount();j++){
-				if(Boolean.parseBoolean(table.getValueAt(j, 0).toString())&&table.getValueAt(j, 9).toString().equals("ADD")){
-					textfields[8].setText(table.getValueAt(j, 9).toString());
-					textfields[3].setText(table.getValueAt(j, 6).toString());
-				    break;
-				}
-			}
-			
 			opPanel.add(yesBt);
 			opPanel.add(canBt);			
 		    addOpPanel();
-		
 			return;
 		}
 		
@@ -317,7 +308,7 @@ public class importGUI extends JPanel {
 			}
 			public void addConfirmPanel(JLabel label){
 			    final JPanel confirmPanel=new JPanel();
-			    label.setBounds(50, 50,400,400);
+			    label.setBounds(300, 10,400,400);
 				label.setOpaque(false);
 				final JButton confirmBt=new JButton(new ImageIcon("graphics/confirm1.png"));
 				final JButton cancelBt=new JButton(new ImageIcon("graphics/last_step2.png"));
@@ -352,8 +343,10 @@ public class importGUI extends JPanel {
 					    opPanel.add(commodityLb);
 					    opPanel.add(numberLb);
 					    opPanel.add(quantityAndImpriceLb);
+					    opPanel.add(timeLb);
 				
 					    for(int i=0;i<8;i++){
+					    	textfields[i].setText(textfields[i].getText());
 					    	opPanel.add(textfields[i]);
 					    }
 					  
@@ -383,13 +376,14 @@ public class importGUI extends JPanel {
 						
 					}
 				});
-			    confirmPanel.add(label);
-			    confirmPanel.add(confirmBt);
-			    confirmPanel.add(cancelBt);
-			    confirmPanel.setBounds(270,110,754,470);
+				confirmPanel.setBounds(270,110,754,470);
 			    confirmPanel.setLayout(null);
 			    confirmPanel.setVisible(true);
 			    confirmPanel.setOpaque(false);
+			    confirmPanel.add(label);
+			    confirmPanel.add(confirmBt);
+			    confirmPanel.add(cancelBt);
+			    
 			    imports.remove(opPanel);
 				imports.add(confirmPanel);
 				jframe.setContentPane(imports);

@@ -21,25 +21,22 @@ public class AccountManagement {
 		helper.setFilename("data/account.txt");
 		accinfo=helper.readfile();
 		
-		if(accinfo.get(0).equals("")){
-			accinfo.clear();
-			accinfo.add("10000；0；0");
+		if(accinfo.size()>0){
+			if(accinfo.get(0).equals("")){
+				accinfo.clear();
+				accinfo.add("10000；0；0");
+			}		
+			helper.split(accinfo.get(0));
+			Account tempacc=new Account();
+			tempacc.setAllCash(Integer.parseInt(helper.sArray[0]));
+			tempacc.setAllNeedToReceive(Integer.parseInt(helper.sArray[1]));
+			tempacc.setAllNeedToPay(Integer.parseInt(helper.sArray[2]));
+			acc.add(tempacc);
 		}
-		
-		//System.out.println(accinfo.get(0).equals(""));
-		
-		helper.split(accinfo.get(0));
-		Account tempacc=new Account();
-		tempacc.setAllCash(Integer.parseInt(helper.sArray[0]));
-		tempacc.setAllNeedToReceive(Integer.parseInt(helper.sArray[1]));
-		tempacc.setAllNeedToPay(Integer.parseInt(helper.sArray[2]));
-		acc.add(tempacc);
-		
 	}
 	
 	public void go(){
 		String keyword=instruction.substring(0, 3);
-		//System.out.println(keyword);
 		
 		Account tempacc=new Account();
 		acc.add(tempacc);
@@ -106,6 +103,7 @@ public class AccountManagement {
 		case "DET":{
 			helper.setFilename("data/accountsheet.txt");
 			ArrayList<String>info=helper.readfile();
+			System.out.println(info.size());
 			for(int i=0;i<info.size();i++){
 				helper.split(info.get(i));
 				messageTable[i][0]=helper.sArray[0];
@@ -125,12 +123,15 @@ public class AccountManagement {
 			break;
 		}
 		case "INI":{
-			acc.get(0).setAllCash(Integer.parseInt(instruction.substring(4)));
-			acc.get(0).setAllNeedToPay(0);
-			acc.get(0).setAllNeedToReceive(0);
-			
+			Account tempaccount=new Account();
+			tempaccount.setAllCash(Integer.parseInt(instruction.substring(4)));
+			tempaccount.setAllNeedToPay(0);
+			tempaccount.setAllNeedToReceive(0);
+			acc.clear();
+			acc.add(tempaccount);
+			System.out.println(tempaccount.getAllCash());
 			outputAccInfo();
-			messageText="graphics/acount/account_success_ini.png";
+			messageText="graphics/account/account_success_ini.png";
 			System.out.println("初始化成功！");
 			break;
 		}
@@ -194,8 +195,10 @@ public class AccountManagement {
 	public void outputAccInfo(){
 		helper.setFilename("data/account.txt");
 		String tempaccinfo=(acc.get(0).getAllCash()+"")+"；"+(acc.get(0).getAllNeedToReceive()+"")+"；"+(acc.get(0).getAllNeedToPay()+"");
+		System.out.println(tempaccinfo);
 		accinfo.clear();
-		accinfo.add(tempaccinfo);
+		accinfo.add(tempaccinfo);		
+		System.out.println(accinfo.get(0));
 		helper.output(accinfo);
 		
 		

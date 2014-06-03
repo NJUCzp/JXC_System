@@ -26,9 +26,6 @@ public class ImportManagement {
 		Helper helper1=new Helper();
 		helper1.setFilename("data/importsheet.txt");
 		iminfo=helper1.readfile();
-		if(iminfo.get(0).equals("")){
-			iminfo.clear();
-		}
 		System.out.println(iminfo.size());
 		
 		Helper helper2=new Helper();
@@ -88,8 +85,9 @@ public class ImportManagement {
 					cusExist=true;
 			}
 			
-			if((!comExist)&&(!cusExist)){
+			if((comExist)&&(cusExist)){
 				iminfo.add(instruction+"；"+cashPay+"；"+n+"");
+				helper.setFilename("data/importsheet.txt");
 				helper.output(iminfo);
 				System.out.println("添加成功！");
 				messageText="graphics/success_add.png";
@@ -109,8 +107,9 @@ public class ImportManagement {
 			String sheetNumber=helper.sArray[0];
 			int quantity=Integer.parseInt(helper.sArray[1]);
 			String date=helper.sArray[2];
+			int n=iminfo.size();
 			
-			for(int i=0;i<iminfo.size();i++){
+			for(int i=0;i<n;i++){
 			    helper.split(iminfo.get(i));
 			    String tempSheetNumber=helper.sArray[7];
 			    if(sheetNumber.trim().equals(tempSheetNumber.trim())){
@@ -129,6 +128,7 @@ public class ImportManagement {
 			        	if(quantity==tempquantity){
 			        		int cashPay=tempquantity*imprice;
 				            iminfo.add("DEL:"+cusName.substring(4)+"；"+commodityName+"；"+number+"；"+tempquantity+"；"+imprice+""+"；"+date+"；"+cashPay+""+"；"+sheetNumber);
+							helper.setFilename("data/importsheet.txt");
 				            helper.output(iminfo);
 				            System.out.println("添加成功！");
 				
@@ -265,12 +265,11 @@ public class ImportManagement {
 		int n=cusinfo.size();
 
 		for(int i=0;i<n;i++){
-			//System.out.println(cus.get(i).name.equals(cusName));
-
+			
 			if(cus.get(i).getName().equals(cusName)){
 				cus.get(i).setNeedToPay(cus.get(i).getNeedToPay()+cashPay);
 				cus.get(i).setNeedToReceive(cus.get(i).getNeedToReceive()+cashRec);
-				newinfo=cus.get(i).getName()+"；"+cus.get(i).getPhoneNumber()+"；"+cus.get(i).getNeedToReceive()+""+"；"+cus.get(i).getNeedToPay()+"";
+				newinfo=cus.get(i).getName()+"；"+cus.get(i).getPhoneNumber()+"；"+cus.get(i).getNeedToReceive()+""+"；"+cus.get(i).getNeedToPay()+"；"+(cus.get(i).getNeedToReceive()-cus.get(i).getNeedToPay())+"";
 			}
 		}
 		if(newinfo.equals("")){

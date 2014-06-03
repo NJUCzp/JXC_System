@@ -113,7 +113,6 @@ public class LoginGUI extends JPanel {
 	     doRememberMe.setBounds(370, 485, 20, 20);
 	     doRememberMe.setContentAreaFilled(false);
 	     doRememberMe.setBorderPainted(false);
-	     
 	     for(int i=0;i<3;i++){
 	    	 group.add(rads[i]);
 	    	 rads[i].setContentAreaFilled(false);
@@ -371,12 +370,9 @@ public class LoginGUI extends JPanel {
 					    	jframe.setContentPane(login);
 					    }
 				}
-				
-				
 			    //setVisible(false);
 			    //jframe.setContentPane(new LoginGUI(jframe));
 				
-	
 			}
 		    
 			

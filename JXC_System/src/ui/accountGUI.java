@@ -444,9 +444,9 @@ public class accountGUI extends JPanel {
 				    break;
 				}
 				}
+				initialopPanel();
 				String errorMessage=con.getMessageText();
 				System.out.println(errorMessage);
-				//initialopPanel();
 				if(!errorMessage.equals("")){
 				    messageLabel.setIcon(new ImageIcon(errorMessage));
 			    }
@@ -466,8 +466,7 @@ public class accountGUI extends JPanel {
 			}
 			public void actionPerformed(ActionEvent e){
 				opPanel.removeAll();
-				initialopPanel();
-				addOpPanel();
+				jframe.setContentPane(new accountGUI(jframe));
 			}
 			
 		}

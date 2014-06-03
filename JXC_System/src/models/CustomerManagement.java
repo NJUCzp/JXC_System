@@ -134,7 +134,6 @@ public class CustomerManagement {
 					messageTable[0][3]=cus.get(i).getNeedToReceive()+"";
 					messageTable[0][4]=cus.get(i).getNeedToPay()+"";
 					messageTable[0][5]=cus.get(i).getTotal()+"";
-					//messageText="<html>"+"客户姓名："+name2+"<br>"+"联系方式： "+cus.get(i).phoneNumber+"<br>"+"应收账款金额： "+cus.get(i).needToReceive+"<br>"+"应付账款金额："+cus.get(i).needToPay+"<br>"+"合计："+cus.get(i).total+"</html>";
 				}
 			}
 			break;
@@ -150,13 +149,10 @@ public class CustomerManagement {
 				messageTable[i][4]=cus.get(i).getNeedToPay()+"";
 				messageTable[i][5]=cus.get(i).getTotal()+"";
 			}
-			
-
 			break;
 		}
 		}
 	}
-	
 	public String getMessageText(){
 		return messageText;
 	}

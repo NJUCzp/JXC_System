@@ -397,8 +397,7 @@ public class customerGUI extends JPanel {
 			}
 			public void actionPerformed(ActionEvent e){
 				opPanel.removeAll();
-				initialopPanel();
-				addOpPanel();
+				jframe.setContentPane(new customerGUI(jframe));
 			}
 			
 		}

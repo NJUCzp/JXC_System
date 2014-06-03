@@ -24,9 +24,7 @@ public class ExportManagement {
 		Helper helper1=new Helper();
 		helper1.setFilename("data/exportsheet.txt");
 		exinfo=helper1.readfile();
-		if(exinfo.get(0).equals("")){
-			exinfo.clear();
-		}
+		
 		Helper helper2=new Helper();
 		helper2.setFilename("data/commodity.txt");
 		cominfo=helper2.readfile();
@@ -81,8 +79,9 @@ public class ExportManagement {
 				if(cus.get(i).getName().equals(cusName))
 					cusExist=true;
 			}
-			if((!comExist)&&(!cusExist)){
+			if((comExist)&&(cusExist)){
 				exinfo.add(instruction+"；"+cashRec+"；"+n+"");
+				helper.setFilename("data/exportsheet.txt");
 				helper.output(exinfo);
 				System.out.println("添加成功！");
 				messageText="graphics/success_add.png";
@@ -101,8 +100,9 @@ public class ExportManagement {
 			String sheetNumber=helper.sArray[0];
 			int quantity=Integer.parseInt(helper.sArray[1]);
 			String date=helper.sArray[2];
+			int n=exinfo.size();
 			
-			for(int i=0;i<exinfo.size();i++){
+			for(int i=0;i<n;i++){
 			    helper.split(exinfo.get(i));
 			    String tempSheetNumber=helper.sArray[7];
 			    if(sheetNumber.trim().equals(tempSheetNumber.trim())){
@@ -122,9 +122,9 @@ public class ExportManagement {
 			        	if(quantity==tempquantity){
 			        		int cashRec=tempquantity*exprice;
 				            exinfo.add("DEL:"+cusName.substring(4)+"；"+commodityName+"；"+number+"；"+tempquantity+"；"+exprice+""+"；"+date+"；"+cashRec+""+"；"+sheetNumber);
+							helper.setFilename("data/importsheet.txt");
 				            helper.output(exinfo);
 				            System.out.println("添加成功！");
-				
 				
 				            changeCommodity(commodityName,0,exprice,quantity);
 							changeAccount(0,-cashRec);
@@ -133,24 +133,15 @@ public class ExportManagement {
 			        	}else{
 			        		messageText="graphics/export/export_error_del.png";
 			        	}
-			            
 			            break;
 			        }
-
 			    }
 			}
-
 		    break;
-			
-			
 			/*int cashRec=quantity*exprice;
-			
 			exinfo.add(instruction+"；"+cashRec);
 			helper.output(exinfo);
 			System.out.println("添加成功！");
-			
-			
-			
 			changeCommodity(commodityName,0,exprice,quantity);
 			changeAccount(0,-cashRec);
 			changeCustomer(cusName,0,-cashRec);
@@ -184,7 +175,6 @@ public class ExportManagement {
 				
 			}
 			helper.dataplusone(date1);
-
 			}while(date1.equals(date2));
 			break;
 		}
@@ -212,11 +202,8 @@ public class ExportManagement {
 	
 	public void changeCommodity(String commodityName,int imprice,int exprice,int quantity){
 		Helper helper=new Helper();
-		
 		String newinfo="";
 		int n=cominfo.size();
-
-		
 		for(int i=0;i<n;i++){
 			if(com.get(i).getName().equals(commodityName)){
 				com.get(i).setQuantity(com.get(i).getQuantity()+quantity);
@@ -283,7 +270,7 @@ public class ExportManagement {
 			if(cus.get(i).getName().equals(cusName)){
 				cus.get(i).setNeedToPay(cus.get(i).getNeedToPay()+cashPay);
 				cus.get(i).setNeedToReceive(cus.get(i).getNeedToReceive()+cashRec);
-				newinfo=cus.get(i).getName()+"；"+cus.get(i).getPhoneNumber()+"；"+cus.get(i).getNeedToReceive()+""+"；"+cus.get(i).getNeedToPay()+"";
+				newinfo=cus.get(i).getName()+"；"+cus.get(i).getPhoneNumber()+"；"+cus.get(i).getNeedToReceive()+""+"；"+cus.get(i).getNeedToPay()+"；"+(cus.get(i).getNeedToReceive()-cus.get(i).getNeedToPay())+"";
 			}
 		}
 		

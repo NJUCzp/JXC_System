@@ -12,8 +12,6 @@ public class JXC_View {
 	String instruction=null;
 	String messageText=null;
 
-	
-	
 	public void initialApp(){
 		mainFrame main=new mainFrame();
 		//mainGUI maingui=new mainGUI(main);
@@ -21,27 +19,14 @@ public class JXC_View {
 		//main.setContentPane(maingui);
 		main.setContentPane(login);
 	}
-	public void refreshDisplay(){
-		
-	
-		
-	}
 	
     public void setInstruction(String s){
 		instruction=s;
 	}
 	public String getInstruction(){
-		
 		return instruction;
 	}
 	
-	public void setMessagePicture(Image im){
-		
-	}
-	
-	public void getMessagePicture(){
-		
-	}
 	public void setMessageText(String s){
 		messageText=s;
 	}

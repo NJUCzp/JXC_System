@@ -389,7 +389,6 @@ public class commodityGUI extends JPanel {
 					String errorMessage=con.getMessageText();
 					System.out.println(errorMessage);
 					initialopPanel();
-					//System.out.println(con.getMessageText());
 					if(!errorMessage.equals("")){
 					    messageLabel.setIcon(new ImageIcon(errorMessage));
 				    }

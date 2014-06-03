@@ -21,7 +21,9 @@ public class JXC_Controller {
 	public void setInstruction(){
 		instruction=jxcview.getInstruction();
 	}
-	
+	public void setMessageTable(Object[][] table){
+		messageTable=table;
+	}
 	public void setMessageText(String s){
 		messageText=s;
 	}
@@ -48,7 +50,7 @@ public class JXC_Controller {
 			commodity.setInstruction(instruction.substring(10));
 			commodity.go();
 			if(instruction.substring(10).charAt(0)=='S'||instruction.substring(10).charAt(0)=='F'){
-				messageTable=commodity.getMessageTable();
+				setMessageTable(commodity.getMessageTable());
 			}
 			setMessageText(commodity.getMessageText());
 			break;
@@ -58,7 +60,7 @@ public class JXC_Controller {
 			account.go();
 
 			if(instruction.substring(8).charAt(0)=='D'){
-				messageTable=account.getMessageTable();
+				setMessageTable(account.getMessageTable());
 			}
 			setMessageText(account.getMessageText());
 
@@ -68,7 +70,7 @@ public class JXC_Controller {
 			customer.setInstruction(instruction.substring(9));
 			customer.go();
 			if(instruction.substring(9).charAt(0)=='S'||instruction.substring(9).charAt(0)=='F'){
-				messageTable=customer.getMessageTable();
+				setMessageTable(customer.getMessageTable());
 			}
 			setMessageText(customer.getMessageText());
 
@@ -77,11 +79,8 @@ public class JXC_Controller {
 		case "EX":{
 			exporter.setInstruction(instruction.substring(7));
 			exporter.go();
-			if(instruction.substring(7).charAt(0)=='W'){
-				messageTable=exporter.getMessageTable();
-			}
-			if(instruction.substring(7).charAt(0)=='S'){
-				messageTable=exporter.getMessageTable();
+			if(instruction.substring(7).charAt(0)=='S'||instruction.substring(7).charAt(0)=='W'){
+				setMessageTable(exporter.getMessageTable());
 			}
 			setMessageText(exporter.getMessageText());
 
@@ -90,11 +89,8 @@ public class JXC_Controller {
 		case "IM":{
 			importer.setInstruction(instruction.substring(7));
 			importer.go();
-			if(instruction.substring(7).charAt(0)=='W'){
-				messageTable=importer.getMessageTable();
-			}
-			if(instruction.substring(7).charAt(0)=='S'){
-				messageTable=importer.getMessageTable();
+			if(instruction.substring(7).charAt(0)=='S'||instruction.substring(7).charAt(0)=='W'){
+				setMessageTable(importer.getMessageTable());
 			}
 			setMessageText(importer.getMessageText());
 
@@ -103,7 +99,7 @@ public class JXC_Controller {
 		case "ST":{
 			stock.setInstruction(instruction);
 			stock.go();
-			messageTable=stock.getMessageTable();
+			setMessageTable(stock.getMessageTable());
 			break;
 		}
 		case "LO":{

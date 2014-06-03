@@ -240,38 +240,35 @@ public class exportGUI extends JPanel {
 		if(i==1){
 			//添加销售退货单
 			opPanel.removeAll();
-			clearComponents();
 	        messageLabel.setIcon(new ImageIcon("graphics/option_message_default.png"));
 
-			
 			timeLb.setBounds(160, 180, 550, 60);
-			opPanel.add(sheetLb);
-			opPanel.add(quaLb);
-			opPanel.add(timeLb);
 			
 			textfields[3].setBounds(270, 118, 200, 20);
 			textfields[5].setBounds(270, 198, 50, 20);
 			textfields[6].setBounds(417, 198, 40, 20);
 			textfields[7].setBounds(512, 198, 40, 20);
 
-			opPanel.add(textfields[3]);
-			opPanel.add(textfields[5]);
-			opPanel.add(textfields[6]);
-			opPanel.add(textfields[7]);
-			opPanel.add(textfields[8]);
-			
 			for(int j=0;j<table.getRowCount();j++){
-				if(Boolean.parseBoolean(table.getValueAt(j, 0).toString())&&table.getValueAt(j, 9).toString().equals("ADD")){
+				if(Boolean.parseBoolean(table.getValueAt(j, 0).toString())&&table.getValueAt(j, 2).toString().equals("ADD")){
 					textfields[8].setText(table.getValueAt(j, 9).toString());
 					textfields[3].setText(table.getValueAt(j, 6).toString());
 				    break;
 				}
 			}
 
+			opPanel.add(sheetLb);
+			opPanel.add(quaLb);
+			opPanel.add(timeLb);
+			opPanel.add(textfields[3]);
+			opPanel.add(textfields[5]);
+			opPanel.add(textfields[6]);
+			opPanel.add(textfields[7]);
+			opPanel.add(textfields[8]);
 			opPanel.add(yesBt);
 			opPanel.add(canBt);
 		    addOpPanel();
-		
+			clearComponents();
 			return;
 		}
 		
@@ -368,6 +365,7 @@ public class exportGUI extends JPanel {
 					    opPanel.add(quantityAndExpriceLb);
 				
 					    for(int i=0;i<8;i++){
+					    	textfields[i].setText(textfields[i].getText());
 					    	opPanel.add(textfields[i]);
 					    }
 					  
@@ -456,7 +454,6 @@ public class exportGUI extends JPanel {
 				
 				String errorMessage=con.getMessageText();
 				System.out.println(errorMessage);
-				//initialopPanel();
 				if(!errorMessage.equals("")){
 				    messageLabel.setIcon(new ImageIcon(errorMessage));
 			    }

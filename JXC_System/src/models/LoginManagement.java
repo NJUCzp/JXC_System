@@ -5,7 +5,8 @@ import control.Helper;
 
 
 public class LoginManagement {
-	String instruction;
+	String instruction="";
+	String messageText="";
 	boolean isLoginSuccessfully=false;
 	String position="";
 	String name;
@@ -27,10 +28,15 @@ public class LoginManagement {
 			for(int i=0;i<loginfo.size();i++){
 				helper.split(loginfo.get(i));
 				if(helper.sArray[0].equals(username)&&helper.sArray[1].equals(password)){
+					System.out.println("find loginfo: "+loginfo.get(i));
+					messageText=loginfo.get(i);
 					isLoginSuccessfully=true;
 					position=helper.sArray[2];
 					name=helper.sArray[0];
 				}
+			}
+			if(!isLoginSuccessfully){
+				messageText="false";
 			}
 			System.out.println(name+"  "+position);
 
@@ -54,6 +60,9 @@ public class LoginManagement {
 		return name;
 	}
 	
+	public String  getMessageText(){
+		return messageText;
+	}
 	public boolean isSuccessful() {
 		// TODO Auto-generated method stub
 		return isLoginSuccessfully;

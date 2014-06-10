@@ -6,20 +6,21 @@ import models.ExportManagement;
 import models.ImportManagement;
 import models.LoginManagement;
 import models.StockManagement;
-import ui.JXC_View;
-
-
 public class JXC_Controller {
-	JXC_View jxcview;
-	public JXC_Controller(JXC_View view){
-		jxcview=view;
-	}
-	
 	String instruction;
 	String messageText="";
 	Object messageTable[][];
-	public void setInstruction(){
-		instruction=jxcview.getInstruction();
+	public CommodityManagement commodity=new CommodityManagement();
+	public StockManagement stock=new StockManagement();
+	public ImportManagement importer=new ImportManagement();
+	public ExportManagement exporter=new ExportManagement();
+	public CustomerManagement customer=new CustomerManagement();
+	public AccountManagement account=new AccountManagement();
+	public LoginManagement login=new LoginManagement();
+	
+	public void setInstruction(String instruction){
+		this.instruction=instruction;
+		this.go();
 	}
 	public void setMessageTable(Object[][] table){
 		messageTable=table;
@@ -33,16 +34,9 @@ public class JXC_Controller {
 	public Object[][] getMessageTable(){
 		return messageTable;
 	}
-	public CommodityManagement commodity=new CommodityManagement();
-	public StockManagement stock=new StockManagement();
-	public ImportManagement importer=new ImportManagement();
-	public ExportManagement exporter=new ExportManagement();
-	public CustomerManagement customer=new CustomerManagement();
-	public AccountManagement account=new AccountManagement();
-	public LoginManagement login=new LoginManagement();
 	
 	public void go(){
-		System.out.println(instruction);
+		System.out.println("controller get ins: "+instruction);
 		String keyword="";
 		keyword=instruction.substring(0, 2);
 		switch(keyword){
@@ -63,7 +57,6 @@ public class JXC_Controller {
 				setMessageTable(account.getMessageTable());
 			}
 			setMessageText(account.getMessageText());
-
 			break;
 		}
 		case "CU":{
@@ -73,7 +66,6 @@ public class JXC_Controller {
 				setMessageTable(customer.getMessageTable());
 			}
 			setMessageText(customer.getMessageText());
-
 			break;
 		}
 		case "EX":{
@@ -83,7 +75,6 @@ public class JXC_Controller {
 				setMessageTable(exporter.getMessageTable());
 			}
 			setMessageText(exporter.getMessageText());
-
 			break;
 		}
 		case "IM":{
@@ -93,7 +84,6 @@ public class JXC_Controller {
 				setMessageTable(importer.getMessageTable());
 			}
 			setMessageText(importer.getMessageText());
-
 			break;
 		}
 		case "ST":{
@@ -105,6 +95,7 @@ public class JXC_Controller {
 		case "LO":{
 			login.setInstruction(instruction.substring(6));
 			login.go();
+			setMessageText(login.getMessageText());
 			break;
 		}
 		default:System.out.println("∏Ò Ω¥ÌŒÛ£°");

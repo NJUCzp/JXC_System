@@ -3,8 +3,6 @@ import java.util.ArrayList;
 
 import control.Helper;
 import data.commodity;
-
-
 public class CommodityManagement {
 	String instruction;
 	String messageText="";
@@ -16,8 +14,9 @@ public class CommodityManagement {
 	public void setInstruction(String instruction){
 		this.instruction=instruction;
 		//获取历史记录
-		helper.setFilename("data/history.txt");
-		history=helper.readfile();
+		Helper helper1=new Helper();
+		helper1.setFilename("data/history.txt");
+		history=helper1.readfile();
 		
 		helper.setFilename("data/commodity.txt");
 		info=helper.readfile();
@@ -40,7 +39,6 @@ public class CommodityManagement {
 			        tempcom.setLatestImportPrice(Integer.parseInt(helper.sArray[5]));
 			        tempcom.setLatestExportPrice(Integer.parseInt(helper.sArray[6]));
 			        com.add(tempcom);
-
 		    	}
 		}
 		}else{
@@ -82,10 +80,14 @@ public class CommodityManagement {
 			String number1=helper.sArray[1];
 			int n=info.size();
 			int n1=n;
+			System.out.println(history.indexOf(name1));
+			System.out.println("historySize: "+history.size());
+			for(int i=0;i<history.size();i++){
+				System.out.println("history"+i+" : "+history.get(i));
+			}
 			for(int i=0;i<n;i++){
 				String name2=com.get(i).getName();
 				String number2=com.get(i).getNumber();
-				
 				if(name1.equals(name2)&&number1.equals(number2)&&(history.indexOf(name1)<0)){
 					info.remove(i);
     				i--;
@@ -173,20 +175,17 @@ public class CommodityManagement {
 			int n=info.size();
 			messageTable=new Object[n][8];
 			for(int i=0;i<n;i++){
-				System.out.println(com.get(i).getName());
+				//System.out.println(com.get(i).getDefaultExportPrice()+"  "+com.get(i).getDefaultImportPrice());
 				messageTable[i][0]=new Boolean(false);
 				messageTable[i][1]=com.get(i).getName();
 				messageTable[i][2]=com.get(i).getNumber();
 				messageTable[i][3]=com.get(i).getQuantity()+"";
 				messageTable[i][4]=com.get(i).getDefaultImportPrice()+"";
-				messageTable[i][5]=com.get(i).getExportQuantity()+"";
+				messageTable[i][5]=com.get(i).getDefaultExportPrice()+"";
 				messageTable[i][6]=com.get(i).getLatestImportPrice()+"";
 				messageTable[i][7]=com.get(i).getLatestExportPrice()+"";
 			}
-
-
 			break;
-
 		}
 		}
 		

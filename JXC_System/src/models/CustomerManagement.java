@@ -68,7 +68,7 @@ public class CustomerManagement {
 			for(int i=0;i<n;i++){
 				String name2=cus.get(i).getName();
 				//System.out.println(name2);
-				if(name1.equals(name2)){
+				if(name1.equals(name2)&&(cus.get(i).getNeedToPay()==cus.get(i).getNeedToReceive())){
 					info.remove(i);
     				i--;
     				n--;

@@ -26,7 +26,6 @@ public class stockGUI extends JPanel{
 		this.setBounds(0, 0, jframe.FRAME_WIDTH, jframe.FRAME_HEIGHT);
 		jframe.setDragable(this);
 		initialButton();	
-		view.setInstruction("STOCK_SHO");
 		addTable();
 	}
 	public void paintComponent(Graphics g){
@@ -54,8 +53,8 @@ public class stockGUI extends JPanel{
 	}
 	
 	public void addTable(){
+		view.setInstruction("STOCK_SHO");
 	     String[] colomn={"商品名称","商品型号","进货数量","进货平均单价","进货总价","销售数量","销售单价","销售总价","库存数量","库存平均单价","库存总价"};
-
 	     DefaultTableModel tablem=new DefaultTableModel(view.receiveMessageTable(),colomn){
 	    	 public boolean isCellEditable(int row,int colomn) {
 	    	     return false;

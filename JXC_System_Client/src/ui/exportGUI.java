@@ -463,15 +463,11 @@ public class exportGUI extends JPanel {
 				}
 				}
 				
-				
-				//String errorMessage=con.getMessageText();
 				if(!errorMessage.equals("graphics/option_error_empty.png")){
-					errorMessage=view.receiveMessageText();
+					errorMessage="graphics/option_message_default.png";
 				}
-				System.out.println(errorMessage);
-				if(!errorMessage.equals("")){
-				    messageLabel.setIcon(new ImageIcon(errorMessage));
-			    }
+				//System.out.println(errorMessage);
+				messageLabel.setIcon(new ImageIcon(errorMessage));
 				addOpPanel();
 			   
 			}

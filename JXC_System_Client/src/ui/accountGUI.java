@@ -4,6 +4,8 @@ import javax.swing.table.DefaultTableModel;
 
 //import control.JXC_Controller;
 
+
+
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -13,7 +15,6 @@ import java.awt.event.MouseListener;
 public class accountGUI extends JPanel {
 	mainFrame jframe;
 	JXC_View view;
-	//public JXC_Controller con=new JXC_Controller(view);
 	private Point[] points=new Point[]{new Point(0,110),new Point(0,170),new Point(0,230),new Point(0,290),new Point(0,350),new Point(810,20),new Point(910,20)};
 	public ImageIcon[] OPTION_BUTTONS=new ImageIcon[]{new ImageIcon("graphics/account/account_in.png"),new ImageIcon ("graphics/account/account_out.png"),new ImageIcon("graphics/account/account_all.png"),new ImageIcon("graphics/account/account_ini.png"),new ImageIcon("graphics/back.png"),new ImageIcon("graphics/ring.png"),new ImageIcon("graphics/ring.png")};
 	public ImageIcon[] OPTION_BUTTONS_ENTERED=new ImageIcon[]{new ImageIcon("graphics/account/account_in2.png"),new ImageIcon ("graphics/account/account_out2.png"),new ImageIcon("graphics/account/account_all2.png"),new ImageIcon("graphics/account/account_ini2.png"),new ImageIcon("graphics/back.png"),new ImageIcon("graphics/minimize.png"),new ImageIcon("graphics/close.png")};
@@ -68,8 +69,8 @@ public class accountGUI extends JPanel {
 	}
 	public void initialopPanel(){
         messageLabel.setIcon(new ImageIcon("graphics/option_message_default.png"));
-		String instruction="ACCOUNT_DET:";
-	    view.setInstruction(instruction);
+	    view.setInstruction("ACCOUNT_DET:");
+	    System.out.println(view.receiveMessageTable().length);
 		String[] colomn={"时间","单据性质","客户姓名","收款金额","付款金额"};
 		 DefaultTableModel tablem=new DefaultTableModel(view.receiveMessageTable(),colomn){
 	    	 public boolean isCellEditable(int row,int colomn) {
@@ -79,11 +80,10 @@ public class accountGUI extends JPanel {
 	     JTable table=new JTable();
 	     table.setModel(tablem);
 	    JScrollPane scrollPane=new JScrollPane(table);
-	    scrollPane.setBounds(0, 80, 500, 300);
+	    scrollPane.setBounds(80, 80, 500, 300);
 		opPanel.add(scrollPane);
 	}
 	public void initialButton(){
-
 		for(int i=0;i<buttons.length;i++){
 			buttons[i]=new JButton(OPTION_BUTTONS[i]);
 			buttons[i].setContentAreaFilled(false);
@@ -98,9 +98,7 @@ public class accountGUI extends JPanel {
 			}
 			this.add(buttons[i]);
 		}
-		
-		 jframe.setContentPane(this);
-
+		jframe.setContentPane(this);
 	}
 	
 	public void initialComponents(){
@@ -126,7 +124,6 @@ public class accountGUI extends JPanel {
 		 monthTf.setBorder(BorderFactory.createEmptyBorder());
 		 dayTf.setBorder(BorderFactory.createEmptyBorder());
 
-
 		 cusTf.setFont(new Font(null,3,18));
 		 recTf.setFont(new Font(null,3,18));
 		 payTf.setFont(new Font(null,3,18));
@@ -141,7 +138,6 @@ public class accountGUI extends JPanel {
 		 canBt.setBorderPainted(false);
 		 yesBt.setContentAreaFilled(false);
 		 canBt.setContentAreaFilled(false);
-		 
 	}
 	
 	public void clearComponents(){
@@ -169,7 +165,6 @@ public class accountGUI extends JPanel {
 		private buttonMouseAdapterAndActionListener(int i, accountGUI account){
 			this.i=i;
 			this.account=account;
-			
 		}
 		
 		public void mouseEntered(MouseEvent e){
@@ -200,8 +195,6 @@ public class accountGUI extends JPanel {
 			opPanel.removeAll();
 			clearComponents();
 			messageLabel.setIcon(new ImageIcon("graphics/option_message_default.png"));
-
-					
 			opPanel.add(customerLb);
 		    opPanel.add(receiveLb);
 		    opPanel.add(timeLb);
@@ -211,9 +204,7 @@ public class accountGUI extends JPanel {
 		    opPanel.add(yearTf);
 		    opPanel.add(monthTf);
 		    opPanel.add(dayTf);
-		   
-		
-		    //yesBt.setIcon(new ImageIcon("graphics/next_step.png"));
+		   		
 		    opPanel.add(yesBt);
 		    opPanel.add(canBt);
 
@@ -227,7 +218,6 @@ public class accountGUI extends JPanel {
 			clearComponents();
 			messageLabel.setIcon(new ImageIcon("graphics/option_message_default.png"));
 
-			
 			opPanel.add(customerLb);
 			opPanel.add(payLb);
 			opPanel.add(timeLb);
@@ -244,9 +234,6 @@ public class accountGUI extends JPanel {
 		
 			return;
 		}
-		
-		
-		
 		if(i==2){
 			//显示总账目
 			String instruction="ACCOUNT_ALL:";
@@ -254,12 +241,9 @@ public class accountGUI extends JPanel {
 			opPanel.removeAll();
 			clearComponents();
 			messageLabel.setIcon(new ImageIcon("graphics/option_message_default.png"));
-
-			//JLabel label=new JLabel(con.getMessageText());
-			//System.out.println("Message text: "+con.getMessageText());
-			//label.setBounds(50, 50,300,300);
-			//opPanel.add(label);
-			//opPanel.add(yesBt);
+			JLabel label=new JLabel(view.receiveMessageText());
+			label.setBounds(80, 80, 300, 300);
+			opPanel.add(label);
 			opPanel.add(canBt);
 		    addOpPanel();
 		
@@ -303,11 +287,9 @@ public class accountGUI extends JPanel {
 			
 			public void mouseEntered(MouseEvent e){
 				yesBt.setIcon(new ImageIcon("graphics/confirm2.png"));
-				
 			}
 			public void mouseExited(MouseEvent e){
 				yesBt.setIcon(new ImageIcon("graphics/confirm1.png"));
-				
 			}
 			
 			public void addConfirmPanel(JLabel label){
@@ -325,18 +307,17 @@ public class accountGUI extends JPanel {
 				confirmBt.addActionListener(new ActionListener(){
 					public void actionPerformed(ActionEvent e){
 						confirmPanel.removeAll();
+						System.out.println("Haha! sendIns: "+instruction);
 						view.setInstruction(instruction);
-						//con.setInstruction();
-						//con.go();
 						opPanel.removeAll();
-						String errorMessage="";
-						while(view.receiveMessageText()!=null){
-							errorMessage=view.receiveMessageText();
-						} 
+						String errorMessage=view.receiveMessageText();
 						initialopPanel();
 						if(!errorMessage.equals("")){
 						    messageLabel.setIcon(new ImageIcon(errorMessage));
+					    }else{
+							messageLabel.setIcon(new ImageIcon("graphics/option_message_default.png"));
 					    }
+						//System.out.println("new: "+errorMessage);
 						addOpPanel();
 					}
 				});
@@ -355,8 +336,12 @@ public class accountGUI extends JPanel {
 						opPanel.add(yearTf);
 						opPanel.add(monthTf);
 						opPanel.add(timeLb);
-						opPanel.add(recTf);
+						if(currentPage==0)
+						    opPanel.add(recTf);
+						else
+						    opPanel.add(payTf);
 						opPanel.add(receiveLb);
+						messageLabel.setIcon(new ImageIcon("graphics/option_message_default.png"));
 						addOpPanel();
 					}
 				});
@@ -382,6 +367,8 @@ public class accountGUI extends JPanel {
 						
 					}
 				});
+				messageLabel.setIcon(new ImageIcon("graphics/option_message_default.png"));
+		        messageLabel.setBounds(270, 580, 754, 188);
 			    confirmPanel.add(label);
 			    confirmPanel.add(confirmBt);
 			    confirmPanel.add(cancelBt);
@@ -391,6 +378,7 @@ public class accountGUI extends JPanel {
 			    confirmPanel.setOpaque(false);
 			    account.remove(opPanel);
 				account.add(confirmPanel);
+                account.add(messageLabel);
 				jframe.setContentPane(account);
 			}
 			public void actionPerformed(ActionEvent e){
@@ -404,12 +392,12 @@ public class accountGUI extends JPanel {
 					    opPanel.setVisible(false);
 					    opPanel.removeAll();
 					    JLabel label=new JLabel("<html>"+"                    确认如下收款单？"+"<br>"+"-----------------------------------------------------------"+"<br><br>"+"客户姓名："+cusTf.getText().trim()+"<br><br>"+"收款金额："+recTf.getText().trim()+"<br><br>"+"时间"+yearTf.getText().trim()+"/"+monthTf.getText().trim()+"/"+dayTf.getText().trim()+"<br><br>"+"---------------------------------------------------------"+"</html>");
-						addConfirmPanel(label);		
+					    addConfirmPanel(label);		
 					}
 				    break;
 				}
 				case 1:{
-				    if(cusTf.getText().trim().equals("")||recTf.getText().trim().equals("")){
+				    if(cusTf.getText().trim().equals("")||payTf.getText().trim().equals("")){
 					    errorMessage=("graphics/option_error_empty.png");
 				    }else{
 				    	instruction="ACCOUNT_OUT:"+cusTf.getText().trim()+"；"+payTf.getText().trim()+"；"+yearTf.getText().trim()+"/"+monthTf.getText().trim()+"/"+dayTf.getText().trim();
@@ -438,14 +426,12 @@ public class accountGUI extends JPanel {
 				    break;
 				}
 				}
-				initialopPanel();
-				if(view.receiveMessageText()!=null){
-					errorMessage=view.receiveMessageText();
+				//opPanel.removeAll();
+				//initialopPanel();
+				if(!errorMessage.equals("graphics/option_error_empty.png")){
+					errorMessage="graphics/option_message_default.png";
 				}
-				System.out.println(errorMessage);
-				if(!errorMessage.equals("")){
-				    messageLabel.setIcon(new ImageIcon(errorMessage));
-			    }
+				messageLabel.setIcon(new ImageIcon(errorMessage));
 				addOpPanel();
 			}
 			

@@ -111,9 +111,7 @@ public class customerGUI extends JPanel {
 			buttons[i].setEnabled(true);
 			this.add(buttons[i]);
 		}
-		
 		 jframe.setContentPane(this);
-
 	}
 	
 	public void initialComponents(){
@@ -184,12 +182,11 @@ public class customerGUI extends JPanel {
 			
 			currentPage=i;
 			System.out.println(currentPage);
-		    
 		if(i==0){
 			//添加客户
-			customer.buttons[1].setEnabled(false);
-			buttons[1].setIcon(new ImageIcon("graphics/customer/customer_del_dis.png"));
-			jframe.setContentPane(customer);
+			//customer.buttons[1].setEnabled(false);
+			//buttons[1].setIcon(new ImageIcon("graphics/customer/customer_del_dis.png"));
+			//jframe.setContentPane(customer);
 			opPanel.removeAll();
 			clearComponents();
 			messageLabel.setIcon(new ImageIcon("graphics/option_message_default.png"));
@@ -199,8 +196,7 @@ public class customerGUI extends JPanel {
 		    opPanel.add(cusTf);
 		    opPanel.add(numTf);
 		   
-		
-		    opPanel.add(yesBt);
+ 		    opPanel.add(yesBt);
 		    opPanel.add(canBt);
 
 		    addOpPanel();
@@ -209,41 +205,32 @@ public class customerGUI extends JPanel {
 		}
 		if(i==1){
 			//删除客户
-			ArrayList<String> instructions=new ArrayList<String>();
-			instructions.clear();
-			
+			opPanel.removeAll();
+			clearComponents();
+			messageLabel.setIcon(new ImageIcon("graphics/option_message_default.png"));
 			for(int j=0;j<table.getRowCount();j++){
 				if(Boolean.parseBoolean(table.getValueAt(j, 0).toString())){
-					instructions.add("CUSTOMER_DEL:"+table.getValueAt(j, 1).toString());
+					cusTf.setText(table.getValueAt(j, 1).toString());
+					break;
 				}
 			}
-			
-			System.out.println(instructions.size());
-			for(int j=0;j<instructions.size();j++){
-				view.setInstruction(instructions.get(j));
-				try {
-					Thread.sleep(50);
-				} catch (InterruptedException e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
-				}
-			}
-			
-			instructions.clear();
-			initialopPanel();		
+			opPanel.add(customerLb);
+		    opPanel.add(cusTf);
+ 		    opPanel.add(yesBt);
+		    opPanel.add(canBt);
+		    addOpPanel();
 			return;
 		}
 		if(i==2){
 			//更新客户
-			customer.buttons[1].setEnabled(false);
-			buttons[1].setIcon(new ImageIcon("graphics/customer/customer_del_dis.png"));
-			jframe.setContentPane(customer);
+			//customer.buttons[1].setEnabled(false);
+			//buttons[1].setIcon(new ImageIcon("graphics/customer/customer_del_dis.png"));
+			//jframe.setContentPane(customer);
 			
 			opPanel.removeAll();
 			clearComponents();
 			messageLabel.setIcon(new ImageIcon("graphics/option_message_default.png"));
 		
-		    
 			opPanel.add(customerLb);
 		    opPanel.add(numberLb);
 		    opPanel.add(cusTf);
@@ -260,14 +247,13 @@ public class customerGUI extends JPanel {
 		    opPanel.add(canBt);
 
 		    addOpPanel();
-		    
 		    return;
 		}
 		if(i==3){
 			//查找客户
-			customer.buttons[1].setEnabled(false);
-			buttons[1].setIcon(new ImageIcon("graphics/customer/customer_del_dis.png"));
-			jframe.setContentPane(customer);
+			//customer.buttons[1].setEnabled(false);
+			//buttons[1].setIcon(new ImageIcon("graphics/customer/customer_del_dis.png"));
+			//jframe.setContentPane(customer);
 			opPanel.removeAll();
 			clearComponents();
 			messageLabel.setIcon(new ImageIcon("graphics/option_message_default.png"));
@@ -275,11 +261,9 @@ public class customerGUI extends JPanel {
 			opPanel.add(customerLb);
 			opPanel.add(cusTf);
 			
-			
 			opPanel.add(yesBt);
 			opPanel.add(canBt);
 		    addOpPanel();
-		
 			return;
 		}
 		
@@ -291,16 +275,13 @@ public class customerGUI extends JPanel {
 		if(i==5){
 			jframe.setExtendedState(jframe.ICONIFIED); 
 			return;
-
 		}
 		
 		if(i==6){
 			System.exit(0);
 			return;
 		}
-		
 		}
-		
 		
 		class yesL extends MouseAdapter implements ActionListener{
 			String keyword;
@@ -325,6 +306,17 @@ public class customerGUI extends JPanel {
 					}else{
 						instruction="CUSTOMER_ADD:"+cusTf.getText().trim()+"；"+numTf.getText().trim();
 						view.setInstruction(instruction);
+						errorMessage=view.receiveMessageText();
+					}
+				    break;
+				}
+				case 1:{
+					if(cusTf.getText().trim().equals("")){
+						errorMessage=("graphics/option_error_empty.png");
+					}else{
+						instruction="CUSTOMER_DEL:"+cusTf.getText().trim();
+						view.setInstruction(instruction);
+						errorMessage=view.receiveMessageText();
 					}
 				    break;
 				}
@@ -334,6 +326,7 @@ public class customerGUI extends JPanel {
 					}else{
 						instruction="CUSTOMER_UPD:"+cusTf.getText().trim()+"；"+numTf.getText().trim();
 						view.setInstruction(instruction);
+						errorMessage=view.receiveMessageText();
 					}
 				    break;
 				}
@@ -343,6 +336,7 @@ public class customerGUI extends JPanel {
 					}else{
 						instruction="CUSTOMER_FIN:"+cusTf.getText().trim();
 						view.setInstruction(instruction);
+						errorMessage="graphics/option_message_default.png";
 					}
 			        break;
 			    }
@@ -369,15 +363,9 @@ public class customerGUI extends JPanel {
 					break;
 				}
 				}
-				if(!errorMessage.equals("graphics/option_error_empty.png")){
-					errorMessage=view.receiveMessageText();
-				}
-				if(!errorMessage.equals("")){
-				    messageLabel.setIcon(new ImageIcon(errorMessage));
-			    }
+			    messageLabel.setIcon(new ImageIcon(errorMessage));
 				addOpPanel();
 			}
-			
 		}
 		class canL extends MouseAdapter implements ActionListener{
 			public void mouseEntered(MouseEvent e){

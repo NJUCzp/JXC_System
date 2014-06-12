@@ -58,7 +58,7 @@ public class JXC_App {
 	}
 	
 	public Object[][] receiveMessageTable(){
-		messageTable=(Object[ ][ ])messageObject;
+		messageTable=(Object[][])messageObject;
 	    return messageTable;
 	}
 	
@@ -70,7 +70,6 @@ public class JXC_App {
 					System.out.println("Waiting for text...");
 					while((messageObject=ois.readObject())!=null){
 						messageObject=ois.readObject();
-						//System.out.println(message+"d");
 					}
 				
 			}catch(Exception e){

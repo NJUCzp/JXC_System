@@ -226,15 +226,13 @@ public class importGUI extends JPanel {
 			textfields[5].setBounds(270, 198, 50, 20);
 			textfields[6].setBounds(417, 198, 40, 20);
 			textfields[7].setBounds(512, 198, 40, 20);
-			
 
 			for(int j=0;j<table.getRowCount();j++){
-				System.out.println(table.getValueAt(j, 9).toString());
-				System.out.println(table.getValueAt(j, 6).toString());
+				//System.out.println(table.getValueAt(j, 9).toString());
+				//System.out.println(table.getValueAt(j, 6).toString());
 				if(Boolean.parseBoolean(table.getValueAt(j, 0).toString())&&table.getValueAt(j, 2).toString().equals("ADD")){
 					textfields[8].setText(table.getValueAt(j, 9).toString());
 					textfields[3].setText(table.getValueAt(j, 6).toString());
-					
 				    break;
 				}
 			}
@@ -397,7 +395,6 @@ public class importGUI extends JPanel {
 			    confirmPanel.add(label);
 			    confirmPanel.add(confirmBt);
 			    confirmPanel.add(cancelBt);
-			    
 			    imports.remove(opPanel);
 				imports.add(confirmPanel);
 				jframe.setContentPane(imports);
@@ -444,13 +441,9 @@ public class importGUI extends JPanel {
 				}
 				}
 				if(!errorMessage.equals("graphics/option_error_empty.png")){
-					errorMessage=view.receiveMessageText();
+					errorMessage="graphics/option_message_default.png";
 				}
-				System.out.println(errorMessage);
-				//initialopPanel();
-				if(!errorMessage.equals("")){
-				    messageLabel.setIcon(new ImageIcon(errorMessage));
-			    }
+				messageLabel.setIcon(new ImageIcon(errorMessage));
 				addOpPanel();
 			}
 		}

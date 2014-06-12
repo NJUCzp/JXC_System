@@ -197,9 +197,9 @@ public class commodityGUI extends JPanel {
 		    
 		if(i==0){
 			//添加商品
-			commodity.buttons[1].setEnabled(false);
-			buttons[1].setIcon(new ImageIcon("graphics/commodity/commodity_del_dis.png"));
-			jframe.setContentPane(commodity);
+			//commodity.buttons[1].setEnabled(false);
+			//buttons[1].setIcon(new ImageIcon("graphics/commodity/commodity_del_dis.png"));
+			//jframe.setContentPane(commodity);
 			opPanel.removeAll();
 			clearComponents();
 			messageLabel.setIcon(new ImageIcon("graphics/option_message_default.png"));
@@ -221,42 +221,31 @@ public class commodityGUI extends JPanel {
 		}
 		if(i==1){
 			//删除商品
-			ArrayList<String> instructions=new ArrayList<String>();
-			instructions.clear();
-			
+			opPanel.removeAll();
+			clearComponents();
+			messageLabel.setIcon(new ImageIcon("graphics/option_message_default.png"));
 			for(int j=0;j<table.getRowCount();j++){
 				if(Boolean.parseBoolean(table.getValueAt(j, 0).toString())){
-					instructions.add("COMMODITY_DEL:"+table.getValueAt(j, 1).toString()+"；"+table.getValueAt(j, 2).toString());
+					comTf.setText(table.getValueAt(j, 1).toString());		
+					numTf.setText(table.getValueAt(j, 2).toString());
+					break;
 				}
 			}
 			
-			for(int j=0;j<instructions.size();j++){
-				view.setInstruction(instructions.get(j));
-				try {
-					Thread.sleep(50);
-				} catch (InterruptedException e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
-				}
-			}
-			instructions.clear();
-			String errorMessage="";
-			if(!view.receiveMessageText().equals("")){
-				errorMessage=view.receiveMessageText();
-			}
-			System.out.println("errorMessage: "+errorMessage);
-			initialopPanel();
-			if(!errorMessage.equals("")){
-			    messageLabel.setIcon(new ImageIcon(errorMessage));
-		    }
-            addOpPanel();
+			opPanel.add(commodityLb);
+			opPanel.add(numberLb);
+		    opPanel.add(comTf);
+		    opPanel.add(numTf);
+ 		    opPanel.add(yesBt);
+		    opPanel.add(canBt);
+		    addOpPanel();
 			return;
 		}
 		if(i==2){
 			//修改商品信息
-			commodity.buttons[1].setEnabled(false);
-			buttons[1].setIcon(new ImageIcon("graphics/commodity/commodity_del_dis.png"));
-			jframe.setContentPane(commodity);
+			//commodity.buttons[1].setEnabled(false);
+			//buttons[1].setIcon(new ImageIcon("graphics/commodity/commodity_del_dis.png"));
+			//jframe.setContentPane(commodity);
 			opPanel.removeAll();
 			clearComponents();
 			messageLabel.setIcon(new ImageIcon("graphics/option_message_default.png"));
@@ -287,9 +276,9 @@ public class commodityGUI extends JPanel {
 		    return;
 		}
 		if(i==3){
-			commodity.buttons[1].setEnabled(false);
-			buttons[1].setIcon(new ImageIcon("graphics/commodity/commodity_del_dis.png"));
-			jframe.setContentPane(commodity);
+			//commodity.buttons[1].setEnabled(false);
+			//buttons[1].setIcon(new ImageIcon("graphics/commodity/commodity_del_dis.png"));
+			//jframe.setContentPane(commodity);
 			opPanel.removeAll();
 			clearComponents();
 			messageLabel.setIcon(new ImageIcon("graphics/option_message_default.png"));
@@ -348,7 +337,18 @@ public class commodityGUI extends JPanel {
 					}else{
 						instruction="COMMODITY_ADD:"+comTf.getText().trim()+"；"+numTf.getText().trim()+"；"+imTf.getText().trim()+"；"+exTf.getText().trim();
 						view.setInstruction(instruction);
+						errorMessage=view.receiveMessageText();
 					}						
+				    break;
+				}
+				case 1:{
+					if(comTf.getText().trim().equals("")||numTf.getText().trim().equals("")){
+						errorMessage=("graphics/option_error_empty.png");
+					}else{
+						instruction="COMMODITY_DEL:"+comTf.getText().trim()+"；"+numTf.getText().trim();
+						view.setInstruction(instruction);
+						errorMessage=view.receiveMessageText();
+					}
 				    break;
 				}
 				case 2:{
@@ -357,6 +357,7 @@ public class commodityGUI extends JPanel {
 					}else{
 						instruction="COMMODITY_UPD:"+comTf.getText().trim()+"；"+numTf.getText().trim()+"；"+imTf.getText().trim()+"；"+exTf.getText().trim();
 						view.setInstruction(instruction);
+						errorMessage=view.receiveMessageText();
 					}
 				    break;
 				}
@@ -366,19 +367,19 @@ public class commodityGUI extends JPanel {
 					}else{
 						instruction="COMMODITY_FIN:"+comTf.getText().trim()+"；"+numTf.getText().trim();
 					    view.setInstruction(instruction);
+					    errorMessage="graphics/option_message_default.png";
 				        break;
 					}
 			    }
 				}
 				clearComponents();
 				opPanel.removeAll();
-				
 				switch (currentPage){
 				case 3:{
 					if(!errorMessage.equals("graphics/option_error_empty.png")){
 						buttons[1].setEnabled(true);
 						buttons[1].setIcon(OPTION_BUTTONS[1]);
-						addTable();
+						addTable(); 
 						opPanel.add(canBt);
 					}else{
 						initialopPanel();
@@ -393,12 +394,7 @@ public class commodityGUI extends JPanel {
 					break;
 				}
 				}
-				if(!errorMessage.equals("graphics/option_error_empty.png")){
-					errorMessage=view.receiveMessageText();
-				}
-				if(!errorMessage.equals("")){
-				    messageLabel.setIcon(new ImageIcon(errorMessage));
-			    }
+			    messageLabel.setIcon(new ImageIcon(errorMessage));
 				addOpPanel();
 			}
 			

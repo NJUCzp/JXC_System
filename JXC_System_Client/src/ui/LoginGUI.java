@@ -240,7 +240,6 @@ public class LoginGUI extends JPanel {
 			};
 			
 			registerPanel.setLayout(null);
-			
 			registerPanel.add(newidTf);
 			registerPanel.add(newpassTp);
 			registerPanel.add(passagainTp);
@@ -300,7 +299,8 @@ public class LoginGUI extends JPanel {
 			public void actionPerformed(ActionEvent e){
 				String position="";
 				boolean haveError=false;
-				if(newpassTp.getText().equals(passagainTp.getText())){
+				if(newpassTp.getText().equals(passagainTp.getText()))
+					haveError=false;
 					    if(rads[0].isSelected()){
 					    	position="stockManager";
 					    }
@@ -310,14 +310,16 @@ public class LoginGUI extends JPanel {
 					    if(rads[2].isSelected()){
 					    	position="account";
 					    }
-					    if(rads[0].isSelected()||rads[1].isSelected()||rads[2].isSelected()==false)
+					    if((rads[0].isSelected()||rads[1].isSelected()||rads[2].isSelected())==false)
 					    	haveError=true;
-					    if(newidTf.getText().trim()==""&&newpassTp.getText().trim()==""||passagainTp.getText().trim()=="")
+					    if(newidTf.getText().trim()==""&&(newpassTp.getText().trim()==""||passagainTp.getText().trim()==""))
 					    	haveError=true;
+					    System.out.println(haveError);
 					    if(!haveError){
 						    instruction="LOGIN_RES:"+newidTf.getText().trim()+"£»"+newpassTp.getText().trim()+"£»"+position+"£»"+"false";
+						    System.out.println(instruction);
 						    view.setInstruction(instruction);
-							JPanel successPanel=new JPanel(){
+							/*JPanel successPanel=new JPanel(){
 								public void paintComponent(Graphics g){
 									g.drawImage(new ImageIcon("graphics/login/success_register.png").getImage(), 0, 0, 725, 425, null);
 								}
@@ -336,9 +338,8 @@ public class LoginGUI extends JPanel {
 					    	login.removeAll();
 					    	login.add(successPanel);
 					    	login.add(buttons[2]);
-					    	login.add(buttons[3]);
-					    	jframe.setContentPane(login);
-					    	
+					    	login.add(buttons[3]);*/
+					    	jframe.setContentPane(new LoginGUI(view,jframe));
 					    }
 					    else{
 					    	JPanel errorPanel=new JPanel(){
@@ -363,7 +364,7 @@ public class LoginGUI extends JPanel {
 					    	login.add(buttons[3]);
 					    	jframe.setContentPane(login);
 					    }
-				}
+				
 			    //setVisible(false);
 			    //jframe.setContentPane(new LoginGUI(jframe));			
 			}		    

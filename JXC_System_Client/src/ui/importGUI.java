@@ -12,10 +12,9 @@ import java.awt.event.MouseEvent;
 public class importGUI extends JPanel {
 	mainFrame jframe;
 	JXC_View view;
-	//JXC_Controller con=new JXC_Controller(view);
 	private Point[] points=new Point[]{new Point(0,110),new Point(0,170),new Point(0,230),new Point(0,290),new Point(810,20),new Point(910,20)};
 	private Point[] tf_points=new Point[]{new Point(270, 38),new Point(270, 118),new Point(270, 198),new Point(270, 278),new Point(500, 278),new Point(270, 357),new Point(420,357),new Point(515,357),new Point(270, 38),new Point(150, 100),new Point(150, 175),new Point(270, 118),new Point(420,118),new Point(520,118)};
-    private JTextField[] textfields=new JTextField[]{new JTextField(25),new JTextField(25),new JTextField(25),new JTextField(25),new JTextField(25),new JTextField(5),new JTextField(3),new JTextField(3),new JTextField(25),new JTextField(25),new JTextField(25),new JTextField(5),new JTextField(3),new JTextField(3)};
+    private JTextField[] textfields=new JTextField[]{new JTextField(35),new JTextField(35),new JTextField(35),new JTextField(35),new JTextField(35),new JTextField(5),new JTextField(3),new JTextField(3),new JTextField(25),new JTextField(25),new JTextField(25),new JTextField(5),new JTextField(3),new JTextField(3)};
 	public ImageIcon[] OPTION_BUTTONS=new ImageIcon[]{new ImageIcon("graphics/import/import_add.png"),new ImageIcon ("graphics/import/import_del.png"),new ImageIcon("graphics/import/import_sho.png"),new ImageIcon("graphics/back.png"),new ImageIcon("graphics/ring.png"),new ImageIcon("graphics/ring.png")};
 	public ImageIcon[] OPTION_BUTTONS_ENTERED=new ImageIcon[]{new ImageIcon("graphics/import/import_add2.png"),new ImageIcon ("graphics/import/import_del2.png"),new ImageIcon("graphics/import/import_sho2.png"),new ImageIcon("graphics/back.png"),new ImageIcon("graphics/minimize.png"),new ImageIcon("graphics/close.png")};
 	Image bg=new ImageIcon("graphics/option_background.png").getImage();
@@ -135,7 +134,7 @@ public class importGUI extends JPanel {
 			 textfields[i].setBorder(BorderFactory.createEmptyBorder());
 			 textfields[i].setFont(new Font(null,3,18));
 			 if(i<3||i>7){
-				 textfields[i].setBounds(tf_points[i].x, tf_points[i].y, 200, 20);
+				 textfields[i].setBounds(tf_points[i].x, tf_points[i].y, 350, 20);
 			 }
 			 if(i>=3||i<=4){
 				 textfields[i].setBounds(tf_points[i].x, tf_points[i].y, 100, 20);
@@ -228,8 +227,6 @@ public class importGUI extends JPanel {
 			textfields[7].setBounds(512, 198, 40, 20);
 
 			for(int j=0;j<table.getRowCount();j++){
-				//System.out.println(table.getValueAt(j, 9).toString());
-				//System.out.println(table.getValueAt(j, 6).toString());
 				if(Boolean.parseBoolean(table.getValueAt(j, 0).toString())&&table.getValueAt(j, 2).toString().equals("ADD")){
 					textfields[8].setText(table.getValueAt(j, 9).toString());
 					textfields[3].setText(table.getValueAt(j, 6).toString());
@@ -259,7 +256,7 @@ public class importGUI extends JPanel {
 			opPanel.add(startLb);
 			opPanel.add(endLb);
 			textfields[5].setBounds(270, 38, 50, 20);
-			textfields[6].setBounds(420, 38, 40, 20);
+			textfields[6].setBounds(425, 38, 40, 20);
 			textfields[7].setBounds(520, 38, 40, 20);
 			for(int j=0;j<textfields.length;j++){
 				if((j>=5&&j<=7)||(j>=11&&j<=13))
@@ -295,15 +292,13 @@ public class importGUI extends JPanel {
 			String instruction;
 			public void mouseEntered(MouseEvent e){
 				yesBt.setIcon(new ImageIcon("graphics/confirm2.png"));
-				
 			}
 			public void mouseExited(MouseEvent e){
 				yesBt.setIcon(new ImageIcon("graphics/confirm1.png"));
-				
 			}
 			public void addConfirmPanel(JLabel label){
 			    final JPanel confirmPanel=new JPanel();
-			    label.setBounds(300, 10,400,400);
+			    label.setBounds(30, 10,700,400);
 				label.setOpaque(false);
 				final JButton confirmBt=new JButton(new ImageIcon("graphics/confirm1.png"));
 				final JButton cancelBt=new JButton(new ImageIcon("graphics/last_step2.png"));
@@ -376,7 +371,6 @@ public class importGUI extends JPanel {
 						confirmBt.setIcon(new ImageIcon("graphics/confirm1.png"));
 						
 					}
-					
 				});
 				
 				cancelBt.addMouseListener(new MouseAdapter(){
@@ -410,7 +404,7 @@ public class importGUI extends JPanel {
 						instruction="IMPORT_ADD:"+textfields[0].getText().trim()+"；"+textfields[1].getText().trim()+"；"+textfields[2].getText().trim()+"；"+textfields[3].getText().trim()+"；"+textfields[4].getText().trim()+"；"+textfields[5].getText().trim()+"/"+textfields[6].getText().trim()+"/"+textfields[7].getText().trim();
 					    opPanel.setVisible(false);    
 					    opPanel.removeAll();
-					    JLabel label=new JLabel("<html>"+"                    确认如下进货单？"+"<br>"+"-----------------------------------------------------------"+"<br><br>"+"客户姓名："+textfields[0].getText().trim()+"<br><br>"+"商品名称："+textfields[1].getText().trim()+"<br><br>"+"商品型号："+textfields[2].getText().trim()+"<br><br>"+"数量："+textfields[3].getText().trim()+"<br><br>"+"单价："+textfields[4].getText().trim()+"<br><br>"+"时间"+textfields[5].getText().trim()+"/"+textfields[6].getText().trim()+"/"+textfields[7].getText().trim()+"<br><br>"+"---------------------------------------------------------"+"</html>");
+					    JLabel label=new JLabel("<html>"+"                    确认如下进货单？"+"<br>"+"----------------------------------------------------------------------------------------------------------------------"+"<br><br>"+"客户姓名："+textfields[0].getText().trim()+"<br><br>"+"商品名称："+textfields[1].getText().trim()+"<br><br>"+"商品型号："+textfields[2].getText().trim()+"<br><br>"+"数量："+textfields[3].getText().trim()+"<br><br>"+"单价："+textfields[4].getText().trim()+"<br><br>"+"时间"+textfields[5].getText().trim()+"/"+textfields[6].getText().trim()+"/"+textfields[7].getText().trim()+"<br><br>"+"----------------------------------------------------------------------------------------------------------------------"+"</html>");
 						addConfirmPanel(label);
 					}
 				    break;
@@ -422,7 +416,7 @@ public class importGUI extends JPanel {
 						instruction="IMPORT_DEL:"+textfields[8].getText().trim()+"；"+textfields[3].getText().trim()+"；"+textfields[5].getText().trim()+"/"+textfields[6].getText().trim()+"/"+textfields[7].getText().trim();
 				        opPanel.setVisible(false);    
 					    opPanel.removeAll();
-					    JLabel label=new JLabel("<html>"+"确认如下进货退货单？"+"<br>"+"-------------------------"+"<br>"+"进货单号："+textfields[8].getText().trim()+"<br>"+"退货数量："+textfields[3].getText().trim()+"<br>"+"日期："+textfields[5].getText().trim()+"/"+textfields[6].getText().trim()+"/"+textfields[7].getText().trim()+"<br>"+"---------------------------"+"</html>");
+					    JLabel label=new JLabel("<html>"+"确认如下进货退货单？"+"<br>"+"----------------------------------------------------------------------------------------------------------------------"+"<br>"+"进货单号："+textfields[8].getText().trim()+"<br>"+"退货数量："+textfields[3].getText().trim()+"<br>"+"日期："+textfields[5].getText().trim()+"/"+textfields[6].getText().trim()+"/"+textfields[7].getText().trim()+"<br>"+"----------------------------------------------------------------------------------------------------------------------"+"</html>");
 					    addConfirmPanel(label);
 					}
 				    break;

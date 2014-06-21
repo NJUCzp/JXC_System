@@ -19,7 +19,6 @@ public class commodityGUI extends JPanel {
 	JButton[] buttons=new JButton[7];
 	Image bg=new ImageIcon("graphics/option_background.png").getImage();
 	JPanel opPanel=new JPanel();
-	//JPanel messagePanel=new JPanel();
 	JLabel messageLabel=new JLabel();
 	JLabel commodityLb=new JLabel(new ImageIcon("graphics/commodity/commodity_name.png"));
     JLabel numberLb=new JLabel(new ImageIcon("graphics/commodity/commodity_number.png"));
@@ -80,10 +79,10 @@ public class commodityGUI extends JPanel {
 	    JTable table=new JTable();
 	    table.setModel(tablem);
 	    this.table=table;
-	
+	    //table.setOpaque(false);
         JScrollPane scrollPane=new JScrollPane(table);
 	    scrollPane.setBounds(80, 80, 500, 300);
-	     
+	    //scrollPane.setOpaque(false);
 	    opPanel.add(scrollPane);
 		
 	}

@@ -5,10 +5,8 @@ import control.Helper;
 import data.Account;
 import data.commodity;
 import data.customer;
-
-
 public class ImportManagement {
-	String instruction;
+	String instruction="";
 	Object[][] messageTable;
 	String messageText="";
 	Helper helper=new Helper();
@@ -26,7 +24,6 @@ public class ImportManagement {
 		Helper helper1=new Helper();
 		helper1.setFilename("data/importsheet.txt");
 		iminfo=helper1.readfile();
-		System.out.println(iminfo.size());
 		
 		Helper helper2=new Helper();
 		helper2.setFilename("data/commodity.txt");
@@ -59,22 +56,32 @@ public class ImportManagement {
 			cus.add(tempcus);
 		}
 		
-		System.out.println(iminfo.size());
 	}
 	public void go(){
 		char keyword=instruction.charAt(0);
 		getInfo();
 		switch(keyword){
 		case 'A':{
+			boolean cusExist=false;
+			boolean comExist=false;
+			
 			helper.split(instruction.substring(4));
 			String cusName=helper.sArray[0];
 			String commodityName=helper.sArray[1];
-			int quantity=Integer.parseInt(helper.sArray[3]);
-			int imprice=Integer.parseInt(helper.sArray[4]);
-			int cashPay=quantity*imprice;
+			int quantity=0;
+			int imprice=0;
+			int cashPay=0;
+			System.out.println(instruction);
+			if(helper.sArray[3].toUpperCase().equals(helper.sArray[3].toLowerCase()))
+				quantity=Integer.parseInt(helper.sArray[3]);
+			if(helper.sArray[4].toUpperCase().equals(helper.sArray[4].toLowerCase()))
+				imprice=Integer.parseInt(helper.sArray[4]);
+			if(helper.sArray[5].toUpperCase().equals(helper.sArray[5].toLowerCase()))
+				cashPay=quantity*imprice;
+			
 			int n=iminfo.size();
-			boolean cusExist=false;
-			boolean comExist=false;
+			System.out.println(instruction);
+			System.out.println(com.size()+"  "+cus.size());
 			
 			for(int i=0;i<com.size();i++){
 				if(com.get(i).getName().equals(commodityName))
@@ -84,7 +91,7 @@ public class ImportManagement {
 				if(cus.get(i).getName().equals(cusName))
 					cusExist=true;
 			}
-			
+			System.out.println(comExist+"  "+cusExist);
 			if((comExist)&&(cusExist)){
 				iminfo.add(instruction+"£»"+cashPay+"£»"+n+"");
 				helper.setFilename("data/importsheet.txt");
@@ -99,13 +106,15 @@ public class ImportManagement {
 			}else{
 				messageText="graphics/import/import_error_add.png";
 			}
-			
+			System.out.println(messageText);
 			break;
 		}
 		case 'D':{
 			helper.split(instruction.substring(4));
 			String sheetNumber=helper.sArray[0];
-			int quantity=Integer.parseInt(helper.sArray[1]);
+			int quantity=0;
+			if(helper.sArray[1].toUpperCase().equals(helper.sArray[1].toLowerCase()))
+				quantity=Integer.parseInt(helper.sArray[1]);			
 			String date=helper.sArray[2];
 			int n=iminfo.size();
 			
@@ -148,36 +157,38 @@ public class ImportManagement {
 		}
 		case 'S':{
 			int n=iminfo.size();
+			int tableSize=0;
+			ArrayList<String> tempTable=new ArrayList<String>();
 			helper.split(instruction.substring(4));
 			String date1=helper.sArray[0];
 			String date2=helper.sArray[1];
-			messageTable=new Object[n][10];
 			do{
 			for(int i=0;i<n;i++){
 				helper.split(iminfo.get(i));
 				String imdate=helper.sArray[5];
-				
 				if(imdate.equals(date1)){
-					messageTable[i][0]=new Boolean(false);
-					messageTable[i][1]=helper.sArray[5];
-				    messageTable[i][2]=helper.sArray[0].substring(0,3);
-				    messageTable[i][3]=helper.sArray[0].substring(4);
-				    messageTable[i][4]=helper.sArray[1];
-				    messageTable[i][5]=helper.sArray[2];
-				    messageTable[i][6]=helper.sArray[3];
-				    messageTable[i][7]=helper.sArray[4];
-				    messageTable[i][8]=helper.sArray[6];
-				    messageTable[i][9]=helper.sArray[7];
-				   
-					System.out.println(imdate+":"+iminfo.get(i));
+					tableSize++;
+					tempTable.add(iminfo.get(i));
 				}
-				
 			}
-			helper.dataplusone(date1);
-
-			}while(date1.equals(date2)==true);
+			date1=helper.dataplusone(date1);
+			}while(date1.equals(helper.dataplusone(date2))==false);
+			
+			messageTable=new Object[tableSize][10];
+			for(int i=0;i<tableSize;i++){
+				helper.split(tempTable.get(i));
+				messageTable[i][0]=new Boolean(false);
+				messageTable[i][1]=helper.sArray[5];
+			    messageTable[i][2]=helper.sArray[0].substring(0,3);
+			    messageTable[i][3]=helper.sArray[0].substring(4);
+			    messageTable[i][4]=helper.sArray[1];
+			    messageTable[i][5]=helper.sArray[2];
+			    messageTable[i][6]=helper.sArray[3];
+			    messageTable[i][7]=helper.sArray[4];
+			    messageTable[i][8]=helper.sArray[6];
+			    messageTable[i][9]=helper.sArray[7];
+			}
 			break;
-
 		}
 		case 'W':{
 			messageTable=new Object[iminfo.size()][10];
@@ -309,5 +320,4 @@ public class ImportManagement {
 	public String getMessageText(){
 		return messageText;
 	}
-
 }

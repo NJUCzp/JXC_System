@@ -5,8 +5,6 @@ import control.Helper;
 import data.Account;
 import data.commodity;
 import data.customer;
-
-
 public class ExportManagement {
 	String instruction;
 	Object[][] messageTable;
@@ -65,9 +63,15 @@ public class ExportManagement {
 			helper.split(instruction.substring(4));
 			String cusName=helper.sArray[0];
 			String commodityName=helper.sArray[1];
-			int quantity=Integer.parseInt(helper.sArray[3]);
-			int exprice=Integer.parseInt(helper.sArray[4]);
-			int cashRec=quantity*exprice;
+			int quantity=0;
+			int exprice=0;
+			int cashRec=0;
+			if(helper.sArray[3].toUpperCase().equals(helper.sArray[3].toLowerCase()))
+				quantity=Integer.parseInt(helper.sArray[3]);
+			if(helper.sArray[4].toUpperCase().equals(helper.sArray[4].toLowerCase()))
+				exprice=Integer.parseInt(helper.sArray[4]);
+			if(helper.sArray[5].toUpperCase().equals(helper.sArray[5].toLowerCase()))
+				cashRec=quantity*exprice;
 			int n=exinfo.size();
 			boolean cusExist=false;
 			boolean comExist=false;
@@ -98,7 +102,9 @@ public class ExportManagement {
 		case 'D':{
 			helper.split(instruction.substring(4));
 			String sheetNumber=helper.sArray[0];
-			int quantity=Integer.parseInt(helper.sArray[1]);
+			int quantity=0;
+			if(helper.sArray[1].toUpperCase().equals(helper.sArray[1].toLowerCase()))
+				quantity=Integer.parseInt(helper.sArray[1]);		
 			String date=helper.sArray[2];
 			int n=exinfo.size();
 			
@@ -138,28 +144,29 @@ public class ExportManagement {
 			    }
 			}
 		    break;
-			/*int cashRec=quantity*exprice;
-			exinfo.add(instruction+"£»"+cashRec);
-			helper.output(exinfo);
-			System.out.println("Ìí¼Ó³É¹¦£¡");
-			changeCommodity(commodityName,0,exprice,quantity);
-			changeAccount(0,-cashRec);
-			changeCustomer(cusName,0,-cashRec);
-			break;*/
 		}
 		case 'S':{
 			int n=exinfo.size();
+			int tableSize=0;
+			ArrayList<String> tempTable=new ArrayList<String>();
 			helper.split(instruction.substring(4));
 			String date1=helper.sArray[0];
 			String date2=helper.sArray[1];
-			messageTable=new Object[n][10];
-
 			do{
-			for(int i=0;i<n;i++){
-				helper.split(exinfo.get(i));
-				String imdate=helper.sArray[5];
+				for(int i=0;i<n;i++){
+					helper.split(exinfo.get(i));
+					String imdate=helper.sArray[5];
+					if(imdate.equals(date1)){
+						tableSize++;
+						tempTable.add(exinfo.get(i));
+					}
+				}
+				date1=helper.dataplusone(date1);
+				}while(date1.equals(helper.dataplusone(date2))==false);
 				
-				if(imdate.equals(date1)){
+				messageTable=new Object[tableSize][10];
+				for(int i=0;i<tableSize;i++){
+					helper.split(tempTable.get(i));
 					messageTable[i][0]=new Boolean(false);
 					messageTable[i][1]=helper.sArray[5];
 				    messageTable[i][2]=helper.sArray[0].substring(0,3);
@@ -171,12 +178,7 @@ public class ExportManagement {
 				    messageTable[i][8]=helper.sArray[6];
 				    messageTable[i][9]=helper.sArray[7];
 				}
-
-				
-			}
-			helper.dataplusone(date1);
-			}while(date1.equals(date2));
-			break;
+				break;
 		}
 		case 'W':{
 			messageTable=new Object[exinfo.size()][10];
@@ -230,8 +232,6 @@ public class ExportManagement {
 		}
 		helper.setFilename("data/commodity.txt");
 		helper.output(cominfo);
-		
-	
 	}
 	
 	public void changeAccount(int cashPay,int cashRec){
@@ -252,21 +252,13 @@ public class ExportManagement {
 		accinfo.clear();
 		accinfo.add(newaccinfo);
 		helper.output(accinfo);
-
-		
 	}
 	
 	public void changeCustomer(String cusName,int cashRec,int cashPay){
-		
-		
 		Helper helper=new Helper();
-		
 		String newinfo="";
-		int n=cusinfo.size();
-
-		
+		int n=cusinfo.size();		
 		for(int i=0;i<n;i++){
-			//System.out.println(cus.get(i).name.equals(cusName));
 			if(cus.get(i).getName().equals(cusName)){
 				cus.get(i).setNeedToPay(cus.get(i).getNeedToPay()+cashPay);
 				cus.get(i).setNeedToReceive(cus.get(i).getNeedToReceive()+cashRec);
@@ -284,17 +276,13 @@ public class ExportManagement {
 		for(int i=0;i<n;i++){
 			helper.split(cusinfo.get(i));
 			String name2=helper.sArray[0];
-			//System.out.println(name1+" "+name2);
 			if(name1.equals(name2)){
 				cusinfo.remove(i);
 				cusinfo.add(newinfo);
-				//i--;
 			}
 		}
-		
 		helper.setFilename("data/customer.txt");
-		helper.output(cusinfo);
-		
+		helper.output(cusinfo);	
 	}
 	
 	public void changeHistory(String commodityName){
@@ -311,7 +299,4 @@ public class ExportManagement {
 	public String getMessageText(){
 		return messageText;
 	}
-
-
-
 }

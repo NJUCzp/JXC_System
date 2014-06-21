@@ -27,7 +27,6 @@ public class StockManagement {
 				int totalimprice=0;
 				int exquantity=0;
 				int totalexprice=0;
-			
 
 			    String name=history.get(j);
 			    String number="";
@@ -49,13 +48,21 @@ public class StockManagement {
 					for(int i=0;i<n;i++){
 						helper.split(iminfo.get(i));
 						String commodityname=helper.sArray[1];
+						
+						//System.out.println(commodityname);
+						
 						if(name.equals(commodityname)&&iminfo.get(i).charAt(0)=='A'){
 							imquantity=imquantity+Integer.parseInt(helper.sArray[3]);
 							totalimprice=totalimprice+Integer.parseInt(helper.sArray[6].replace(" ", ""));
 						}else{
-							imquantity=imquantity-Integer.parseInt(helper.sArray[3]);
-							totalimprice=totalimprice-Integer.parseInt(helper.sArray[6].replace(" ", ""));
+							if(name.equals(commodityname)){
+								imquantity=imquantity-Integer.parseInt(helper.sArray[3]);
+								totalimprice=totalimprice-Integer.parseInt(helper.sArray[6].replace(" ", ""));
+							}
 						}
+						
+						//System.out.println(name+": imquantity"+imquantity+",totalimprice: "+totalimprice);
+
 					}
 				
 				//获取销售数量、销售总价
@@ -71,15 +78,20 @@ public class StockManagement {
 							exquantity=exquantity+Integer.parseInt(helper.sArray[3]);
 							totalexprice=totalexprice+Integer.parseInt(helper.sArray[6]);
 						}else{
-							exquantity=exquantity-Integer.parseInt(helper.sArray[3]);
-							totalexprice=totalexprice-Integer.parseInt(helper.sArray[6]);
+							if(name.equals(commodityname)){
+								exquantity=exquantity-Integer.parseInt(helper.sArray[3]);
+								totalexprice=totalexprice-Integer.parseInt(helper.sArray[6]);
+							}
 						}
+						
+						//System.out.println(name+": imquantity"+imquantity+",totalimprice: "+totalimprice);
+
 					}
 								
 				//输出
-				int averageimprice;
-				int averageexprice;
-				int averageprice;
+				int averageimprice=0;
+				int averageexprice=0;
+				int averageprice=0;
 				
 				if(imquantity==0)
 					averageimprice=0;
@@ -107,7 +119,6 @@ public class StockManagement {
 			    messageTable[j][8]=(imquantity-exquantity)+"";
 			    messageTable[j][9]=averageprice+"";
 			    messageTable[j][10]=(totalimprice-totalexprice)+"";
-			
 			}
 		}else{
 			System.out.println("指令错误！");

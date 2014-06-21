@@ -164,7 +164,7 @@ public class AccountManagement {
 			if(cus.get(i).getName().equals(name)){
 				cus.get(i).setNeedToPay(cus.get(i).getNeedToPay()-cashPay);
 				cus.get(i).setNeedToReceive(cus.get(i).getNeedToReceive()-cashReceive);
-				newinfo=cus.get(i).getName()+"£»"+cus.get(i).getPhoneNumber()+"£»"+cus.get(i).getNeedToReceive()+""+"£»"+cus.get(i).getNeedToPay()+"";
+				newinfo=cus.get(i).getName()+"£»"+cus.get(i).getPhoneNumber()+"£»"+cus.get(i).getNeedToReceive()+""+"£»"+cus.get(i).getNeedToPay()+""+"£»"+(cus.get(i).getNeedToReceive()-cus.get(i).getNeedToPay())+"";
 			}
 		}
 		System.out.println(newinfo);

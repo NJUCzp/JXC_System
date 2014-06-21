@@ -19,14 +19,16 @@ public class LoginManagement {
 	}
 	public void go(){
 		String keyword=instruction.substring(0, 3);
-		
-		switch (keyword){
+        switch (keyword){
 		case "LOG":{
 			helper.split(instruction.substring(4));
 			String username=helper.sArray[0];
 			String password=helper.sArray[1];
 			for(int i=0;i<loginfo.size();i++){
+				System.out.println(username+"   "+password);
 				helper.split(loginfo.get(i));
+				System.out.println(helper.sArray[0]+"   "+helper.sArray[1]);
+				System.out.println(helper.sArray[0].equals(username)&&helper.sArray[1].equals(password));
 				if(helper.sArray[0].equals(username)&&helper.sArray[1].equals(password)){
 					System.out.println("find loginfo: "+loginfo.get(i));
 					messageText=loginfo.get(i);
@@ -39,7 +41,9 @@ public class LoginManagement {
 				messageText="false";
 			}
 			System.out.println(name+"  "+position);
-
+			name=null;
+			position=null;
+			isLoginSuccessfully=false;
 			break;
 		}
 		case "RES":{

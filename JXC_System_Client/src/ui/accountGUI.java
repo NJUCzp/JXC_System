@@ -294,7 +294,7 @@ public class accountGUI extends JPanel {
 			
 			public void addConfirmPanel(JLabel label){
 			    final JPanel confirmPanel=new JPanel();
-			    label.setBounds(50, 50,400,400);
+			    label.setBounds(30, 10,700,400);
 				label.setOpaque(false);
 				final JButton confirmBt=new JButton(new ImageIcon("graphics/confirm1.png"));
 				final JButton cancelBt=new JButton(new ImageIcon("graphics/last_step2.png"));
@@ -307,7 +307,7 @@ public class accountGUI extends JPanel {
 				confirmBt.addActionListener(new ActionListener(){
 					public void actionPerformed(ActionEvent e){
 						confirmPanel.removeAll();
-						System.out.println("Haha! sendIns: "+instruction);
+						//System.out.println("Haha! sendIns: "+instruction);
 						view.setInstruction(instruction);
 						opPanel.removeAll();
 						String errorMessage=view.receiveMessageText();
@@ -391,7 +391,7 @@ public class accountGUI extends JPanel {
 						instruction="ACCOUNT_IN:"+cusTf.getText().trim()+"；"+recTf.getText().trim()+"；"+yearTf.getText().trim()+"/"+monthTf.getText().trim()+"/"+dayTf.getText().trim();
 					    opPanel.setVisible(false);
 					    opPanel.removeAll();
-					    JLabel label=new JLabel("<html>"+"                    确认如下收款单？"+"<br>"+"-----------------------------------------------------------"+"<br><br>"+"客户姓名："+cusTf.getText().trim()+"<br><br>"+"收款金额："+recTf.getText().trim()+"<br><br>"+"时间"+yearTf.getText().trim()+"/"+monthTf.getText().trim()+"/"+dayTf.getText().trim()+"<br><br>"+"---------------------------------------------------------"+"</html>");
+					    JLabel label=new JLabel("<html>"+"                    确认如下收款单？"+"<br>"+"----------------------------------------------------------------------------------------------------------------------"+"<br><br>"+"客户姓名："+cusTf.getText().trim()+"<br><br>"+"收款金额："+recTf.getText().trim()+"<br><br>"+"时间:"+yearTf.getText().trim()+"/"+monthTf.getText().trim()+"/"+dayTf.getText().trim()+"<br><br>"+"----------------------------------------------------------------------------------------------------------------------"+"</html>");
 					    addConfirmPanel(label);		
 					}
 				    break;
@@ -403,7 +403,7 @@ public class accountGUI extends JPanel {
 				    	instruction="ACCOUNT_OUT:"+cusTf.getText().trim()+"；"+payTf.getText().trim()+"；"+yearTf.getText().trim()+"/"+monthTf.getText().trim()+"/"+dayTf.getText().trim();
 				    	opPanel.setVisible(false);
 					    opPanel.removeAll();				    
-					    JLabel label=new JLabel("<html>"+"                    确认如下付款单？"+"<br>"+"-----------------------------------------------------------"+"<br><br>"+"客户姓名："+cusTf.getText().trim()+"<br><br>"+"付款金额："+recTf.getText().trim()+"<br><br>"+"时间"+yearTf.getText().trim()+"/"+monthTf.getText().trim()+"/"+dayTf.getText().trim()+"<br><br>"+"---------------------------------------------------------"+"</html>");
+					    JLabel label=new JLabel("<html>"+"                    确认如下付款单？"+"<br>"+"----------------------------------------------------------------------------------------------------------------------"+"<br><br>"+"客户姓名："+cusTf.getText().trim()+"<br><br>"+"付款金额："+payTf.getText().trim()+"<br><br>"+"时间:"+yearTf.getText().trim()+"/"+monthTf.getText().trim()+"/"+dayTf.getText().trim()+"<br><br>"+"----------------------------------------------------------------------------------------------------------------------"+"</html>");
 						addConfirmPanel(label);
 				    }
 				    break;

@@ -85,6 +85,7 @@ public class JXC_Controller {
 				setMessageTable(importer.getMessageTable());
 			}
 			setMessageText(importer.getMessageText());
+			System.out.println("messageText:"+importer.getMessageText());
 			break;
 		}
 		case "ST":{
@@ -96,6 +97,7 @@ public class JXC_Controller {
 		case "LO":{
 			login.setInstruction(instruction.substring(6));
 			login.go();
+			//System.out.println(login.getMessageText());
 			setMessageText(login.getMessageText());
 			break;
 		}

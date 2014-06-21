@@ -12,9 +12,7 @@ public class JXC_View {
 	public void initialApp(JXC_App app){
 		this.app=app;
 		mainFrame main=new mainFrame();
-		//mainGUI maingui=new mainGUI(main);
 		LoginGUI login=new LoginGUI(this,main);
-		//main.setContentPane(maingui);
 		main.setContentPane(login);
 	}
 	
@@ -22,7 +20,6 @@ public class JXC_View {
 		instruction=s;
 		System.out.println("set: "+instruction);
 		app.sendMessageText(instruction);
-		//System.out.println("view"+instruction);
 	}
 	/*public String getInstruction(){
 		instruction=app.receiveMessageText();
@@ -48,7 +45,7 @@ public class JXC_View {
 	
 	public Object[][] receiveMessageTable(){
 		try {
-			Thread.sleep(100);
+			Thread.sleep(200);
 		} catch (InterruptedException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -56,5 +53,4 @@ public class JXC_View {
 		messageTable=app.receiveMessageTable();
 		return messageTable;
 	}
-
 }

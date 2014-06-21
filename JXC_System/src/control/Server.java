@@ -53,7 +53,15 @@ public class Server {
 								
 	    			}	    			
     			}catch(Exception e){
-    				e.printStackTrace();
+    				//e.printStackTrace();
+    			}finally{
+    				/*if(serversocket!=null)
+						try {
+							serversocket.close();
+						} catch (IOException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}*/
     			}
     		}
     }  
